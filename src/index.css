@@ -1,0 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;600;800&display=swap");
+
+html,
+body {
+  margin: 0;
+  background: #090909;
+  font-family: "Barlow Condensed", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
