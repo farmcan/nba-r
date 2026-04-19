@@ -46,5 +46,7 @@ Type-check:
 ## Docs
 
 - `docs/overview.md`
+- `docs/design-references.md`
 - `docs/matchup-template.md`
 - `docs/research-and-sourcing.md`
+- `docs/system-architecture.md`
