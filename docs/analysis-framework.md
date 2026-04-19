@@ -126,6 +126,8 @@ Output style:
 
 - 2 to 4 tactical keys
 
+Whenever possible, turn at least one of those keys into a real tactical-board explanation.
+
 ### 8. Variance levers
 
 What could flip the expected script?
@@ -185,6 +187,7 @@ These buckets should map into local typed fields:
 - `recentForm`
 - `styleProfiles`
 - `tacticalKeys`
+- `tacticalBoard`
 - `playoffPanorama`
 
 ## Editorial principle
@@ -196,4 +199,3 @@ It is:
 - facts organized into tension
 - stats translated into basketball meaning
 - stories tied back to how the game may actually be played
-

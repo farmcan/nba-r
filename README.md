@@ -63,4 +63,5 @@ Type-check:
 - `docs/ai-runbook.md`
 - `docs/playoff-panorama.md`
 - `docs/rich-preview-framework.md`
+- `docs/tactical-board-layer.md`
 - `docs/tts-workflow.md`

@@ -81,6 +81,17 @@ export type TacticalKey = {
   sourceLabel?: string;
 };
 
+export type TacticalBoardItem = {
+  title: string;
+  setup: string;
+  trigger: string;
+  read: string;
+  counter?: string;
+  offenseTeamId?: TeamId;
+  defenseTeamId?: TeamId;
+  sourceLabel?: string;
+};
+
 export type BracketSeriesTeam = {
   label: string;
   seed: number;
@@ -132,6 +143,7 @@ export type MatchupPreviewData = {
   recentForm?: RecentFormNote[];
   styleProfiles?: StyleProfile[];
   tacticalKeys?: TacticalKey[];
+  tacticalBoard?: TacticalBoardItem[];
   playoffPanorama?: PlayoffPanorama;
   sourceSlate: {
     title: string;

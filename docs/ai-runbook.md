@@ -93,12 +93,14 @@ Preferred buckets:
 - recent form
 - style identity
 - tactical keys
+- tactical board
 - social temperature
 
 Reference:
 
 - `docs/rich-preview-framework.md`
 - `docs/analysis-framework.md`
+- `docs/tactical-board-layer.md`
 
 ## Playoff panorama rule
 

@@ -55,6 +55,11 @@ For a matchup preview, AI should try to collect from these buckets:
 - which matchups can be hunted
 - what action may decide the game
 
+6a. Tactical board
+- one or more specific actions drawn as a board scene
+- first read and second counter
+- not just abstract tactical language
+
 7. Social temperature
 - official NBA posts
 - team-side public posts
@@ -76,6 +81,7 @@ The current matchup data model now supports optional richer buckets:
 - `recentForm`
 - `styleProfiles`
 - `tacticalKeys`
+- `tacticalBoard`
 - `playoffPanorama`
 
 Those fields should be treated as structured research memory.  
