@@ -5,8 +5,14 @@ import {MatchupPreviewData, TacticalBoardItem} from "../../types/matchup";
 import {PlayerSilhouettesRow} from "./PlayerSilhouettes";
 import {
   BottomTicker,
+  CourtBg,
+  CourtLines,
+  FloatingOrbs,
+  NBAScoreBug,
   SceneChrome,
   SceneProgress,
+  SlashDivider,
+  VignetteOverlay,
   getSceneTint,
   neutral,
   resolveTheme,
@@ -55,7 +61,7 @@ const HalfCourt: React.FC<{
   );
 };
 
-// Player dot on court
+// Player dot on court with pulsing ring
 const CourtPlayer: React.FC<{
   x: number;
   y: number;
@@ -74,29 +80,51 @@ const CourtPlayer: React.FC<{
   const scale = interpolate(enter, [0, 1], [0, 1]);
   const opacity = interpolate(enter, [0, 1], [0, 1]);
 
+  // Pulse ring animation
+  const pulsePhase = ((frame * 0.04) % 1);
+  const pulseScale = 1 + pulsePhase * 0.5;
+  const pulseOpacity = (1 - pulsePhase) * 0.3 * opacity;
+
   return (
-    <div
-      style={{
-        position: "absolute",
-        left: x - 18,
-        top: y - 18,
-        width: 36,
-        height: 36,
-        borderRadius: "50%",
-        background: color,
-        color: "#07111B",
-        fontSize: 14,
-        fontWeight: 900,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        transform: `scale(${scale})`,
-        opacity,
-        boxShadow: `0 0 16px ${color}88, 0 2px 8px rgba(0,0,0,0.4)`,
-        zIndex: 10,
-      }}
-    >
-      {number}
+    <>
+      {/* Pulse ring */}
+      <div
+        style={{
+          position: "absolute",
+          left: x - 26,
+          top: y - 26,
+          width: 52,
+          height: 52,
+          borderRadius: "50%",
+          border: `2px solid ${color}`,
+          transform: `scale(${pulseScale})`,
+          opacity: pulseOpacity,
+          zIndex: 9,
+        }}
+      />
+      {/* Player dot */}
+      <div
+        style={{
+          position: "absolute",
+          left: x - 18,
+          top: y - 18,
+          width: 36,
+          height: 36,
+          borderRadius: "50%",
+          background: color,
+          color: "#07111B",
+          fontSize: 14,
+          fontWeight: 900,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transform: `scale(${scale})`,
+          opacity,
+          boxShadow: `0 0 16px ${color}88, 0 2px 8px rgba(0,0,0,0.4)`,
+          zIndex: 10,
+        }}
+      >
+        {number}
       {label && (
         <div
           style={{
@@ -114,7 +142,8 @@ const CourtPlayer: React.FC<{
           {label}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 };
 
@@ -317,11 +346,24 @@ export const TacticalBoardScene: React.FC<{
   return (
     <AbsoluteFill
       style={sceneBackground(
-        getSceneTint(homeTheme, 0.16),
-        getSceneTint(awayTheme, 0.18),
+        getSceneTint(homeTheme, 0.1),
+        getSceneTint(awayTheme, 0.12),
       )}
     >
+      <CourtBg src="assets/court.jpg" opacity={0.07} />
+      <CourtLines color="rgba(255,255,255,0.025)" opacity={0.35} />
+      <FloatingOrbs colors={[homeTheme.colors.primary, awayTheme.colors.secondary, "#fff"]} count={3} opacity={0.07} />
+      <VignetteOverlay strength={0.4} />
+
       <SceneChrome homeTheme={homeTheme} awayTheme={awayTheme} />
+      <NBAScoreBug
+        homeCity={data.teams.home.city}
+        awayCity={data.teams.away.city}
+        homeSeed={data.teams.home.seed}
+        awaySeed={data.teams.away.seed}
+        contextLabel={data.contextLabel}
+      />
+      <SlashDivider color={`${homeTheme.colors.primary}06`} width={1.5} angle={-18} />
 
       {/* Background silhouettes */}
       <div style={{position: "absolute", right: 40, top: 80, opacity: 0.06}}>
@@ -347,17 +389,17 @@ export const TacticalBoardScene: React.FC<{
 
       <AbsoluteFill style={{padding: "86px 72px 118px"}}>
         {/* Header */}
-        <div style={{marginBottom: 28, opacity: fadeUp(0, 0)}}>
-          <div style={{color: neutral.sky, fontSize: 22, fontWeight: 800, letterSpacing: 2, textTransform: "uppercase"}}>
-            战术板 · 5 对 5 对位
+        <div style={{marginBottom: 24, opacity: fadeUp(0, 0)}}>
+          <div style={{color: neutral.sky, fontSize: 18, fontWeight: 800, letterSpacing: 3, textTransform: "uppercase"}}>
+            TACTICAL BOARD
           </div>
           <div
             style={{
-              marginTop: 8,
+              marginTop: 6,
               color: neutral.cream,
               fontFamily: '"Noto Sans SC", sans-serif',
               fontWeight: 900,
-              fontSize: 72,
+              fontSize: 64,
               lineHeight: 0.98,
             }}
           >

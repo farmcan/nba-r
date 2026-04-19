@@ -1,5 +1,5 @@
 import React from "react";
-import {AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame} from "remotion";
+import {AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 
 export const neutral = {
   cream: "#F4EFE6",
@@ -343,3 +343,322 @@ const isActiveDot = (activeIndex: number, total: number): number => {
   if (activeIndex >= total - 1) return 0.3;
   return 1;
 };
+
+// NBA Logo watermark — broadcast-style corner badge
+export const NBAScoreBug: React.FC<{
+  homeCity: string;
+  awayCity: string;
+  homeSeed: number;
+  awaySeed: number;
+  contextLabel: string;
+}> = ({homeCity, awayCity, homeSeed, awaySeed, contextLabel}) => {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: 58,
+        top: 20,
+        height: 32,
+        display: "flex",
+        alignItems: "center",
+        gap: 0,
+        zIndex: 50,
+        fontFamily: '"Noto Sans SC", sans-serif',
+      }}
+    >
+      {/* NBA logo */}
+      <div
+        style={{
+          width: 32,
+          height: 32,
+          background: "rgba(29,66,138,0.92)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "4px 0 0 4px",
+        }}
+      >
+        <Img
+          src={staticFile("assets/nba-logo.svg")}
+          style={{width: 20, height: 20, objectFit: "contain"}}
+        />
+      </div>
+      {/* Context label */}
+      <div
+        style={{
+          padding: "0 12px",
+          height: 32,
+          background: "rgba(29,66,138,0.88)",
+          color: "#fff",
+          fontSize: 12,
+          fontWeight: 800,
+          letterSpacing: 1.5,
+          display: "flex",
+          alignItems: "center",
+          textTransform: "uppercase",
+        }}
+      >
+        {contextLabel}
+      </div>
+      {/* Matchup */}
+      <div
+        style={{
+          padding: "0 14px",
+          height: 32,
+          background: "rgba(7,17,27,0.88)",
+          color: neutral.cream,
+          fontSize: 13,
+          fontWeight: 700,
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          borderRadius: "0 4px 4px 0",
+          border: "1px solid rgba(255,255,255,0.1)",
+          borderLeft: "none",
+        }}
+      >
+        <span>{homeCity}</span>
+        <span style={{color: "rgba(255,255,255,0.3)", fontSize: 11}}>#{homeSeed}</span>
+        <span style={{color: "rgba(255,255,255,0.3)"}}>vs</span>
+        <span>{awayCity}</span>
+        <span style={{color: "rgba(255,255,255,0.3)", fontSize: 11}}>#{awaySeed}</span>
+      </div>
+    </div>
+  );
+};
+
+// Court background image layer
+export const CourtBg: React.FC<{
+  src?: string;
+  opacity?: number;
+  scale?: number;
+}> = ({src = "assets/court.jpg", opacity = 0.06, scale = 1}) => {
+  return (
+    <AbsoluteFill>
+      <Img
+        src={staticFile(src)}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          opacity,
+          transform: `scale(${scale})`,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
+// Basketball court SVG decorations — lines, hoops
+export const CourtLines: React.FC<{
+  color?: string;
+  opacity?: number;
+  style?: React.CSSProperties;
+}> = ({color = "rgba(255,255,255,0.04)", opacity = 1, style}) => {
+  return (
+    <div style={{position: "absolute", inset: 0, opacity, ...style}}>
+      {/* Left hoop area */}
+      <svg viewBox="0 0 400 200" style={{position: "absolute", left: -40, top: "20%", width: 400, height: 200}}>
+        <circle cx="340" cy="100" r="60" fill="none" stroke={color} strokeWidth="1.5" />
+        <rect x="0" y="50" width="120" height="100" fill="none" stroke={color} strokeWidth="1.5" />
+        <path d="M 120 50 A 50 50 0 0 1 120 150" fill="none" stroke={color} strokeWidth="1.5" />
+      </svg>
+      {/* Right hoop area */}
+      <svg viewBox="0 0 400 200" style={{position: "absolute", right: -40, bottom: "10%", width: 400, height: 200}}>
+        <circle cx="60" cy="100" r="60" fill="none" stroke={color} strokeWidth="1.5" />
+        <rect x="280" y="50" width="120" height="100" fill="none" stroke={color} strokeWidth="1.5" />
+        <path d="M 280 50 A 50 50 0 0 0 280 150" fill="none" stroke={color} strokeWidth="1.5" />
+      </svg>
+    </div>
+  );
+};
+
+// Diagonal slash divider — broadcast graphic element
+export const SlashDivider: React.FC<{
+  color?: string;
+  width?: number;
+  angle?: number;
+}> = ({color = "rgba(255,255,255,0.06)", width = 3, angle = -25}) => {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: "50%",
+        top: "-10%",
+        width,
+        height: "120%",
+        background: color,
+        transform: `rotate(${angle}deg)`,
+        pointerEvents: "none",
+      }}
+    />
+  );
+};
+
+
+// Text reveal: characters appear one by one
+export const TextReveal: React.FC<{
+  text: string;
+  baseStyle?: React.CSSProperties;
+  highlightStyle?: React.CSSProperties;
+  highlightWords?: string[];
+  startFrame?: number;
+  charsPerTick?: number;
+}> = ({text, baseStyle, highlightStyle, highlightWords, startFrame = 0, charsPerTick = 2}) => {
+  const frame = useCurrentFrame();
+  const chars = text.split("");
+  const charCount = Math.floor((frame - startFrame) / charsPerTick);
+
+  return (
+    <span>
+      {chars.map((char, i) => {
+        if (i > charCount) return null;
+        const isHighlighted = highlightWords?.some((w) => text.substring(Math.max(0, i - w.length + 1), i + 1) === w) ?? false;
+        return (
+          <span
+            key={i}
+            style={{
+              ...baseStyle,
+              ...(isHighlighted && highlightStyle ? highlightStyle : {}),
+            }}
+          >
+            {char}
+          </span>
+        );
+      })}
+    </span>
+  );
+};
+
+// ─── Atmosphere Components ───
+
+// FloatingOrbs — blurred light blobs drifting in background
+export const FloatingOrbs: React.FC<{
+  colors?: string[];
+  count?: number;
+  opacity?: number;
+}> = ({colors = ["#007A33", "#ED174C", "#F4B63D", "#2667FF"], count = 4, opacity = 0.12}) => {
+  const frame = useCurrentFrame();
+  const {width, height} = useVideoConfig();
+
+  // Deterministic seeded positions from index
+  const seeded = (seed: number) => {
+    const x = ((seed * 7919 + 104729) % 1000) / 1000;
+    const y = ((seed * 6271 + 32749) % 1000) / 1000;
+    return {x, y};
+  };
+
+  return (
+    <>
+      {Array.from({length: count}).map((_, i) => {
+        const base = seeded(i * 37 + 13);
+        const size = 200 + i * 80;
+        const driftX = Math.sin(frame * 0.008 + i * 1.7) * 60;
+        const driftY = Math.cos(frame * 0.006 + i * 2.3) * 40;
+        const cx = base.x * width + driftX;
+        const cy = base.y * height + driftY;
+        const color = colors[i % colors.length];
+
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: cx - size / 2,
+              top: cy - size / 2,
+              width: size,
+              height: size,
+              borderRadius: "50%",
+              background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+              filter: `blur(${60 + i * 20}px)`,
+              opacity,
+              pointerEvents: "none",
+            }}
+          />
+        );
+      })}
+    </>
+  );
+};
+
+// ParticleField — small dots rising upward, stadium dust effect
+export const ParticleField: React.FC<{
+  count?: number;
+  color?: string;
+  size?: number;
+  speed?: number;
+  opacity?: number;
+}> = ({count = 40, color = "#F4EFE6", size = 2, speed = 0.5, opacity = 0.35}) => {
+  const frame = useCurrentFrame();
+  const {width, height} = useVideoConfig();
+
+  const seeded = (seed: number) => {
+    const x = ((seed * 7919 + 104729) % 1000) / 1000;
+    const y = ((seed * 6271 + 32749) % 1000) / 1000;
+    return {x, y};
+  };
+
+  return (
+    <>
+      {Array.from({length: count}).map((_, i) => {
+        const base = seeded(i * 53 + 7);
+        const baseX = base.x * width;
+        const rise = ((frame * speed * 0.3 + base.y * 200) % (height + 40)) - 20;
+        const wobble = Math.sin(frame * 0.02 + i * 3.1) * 15;
+        const particleOpacity = Math.min(1, (height - rise) / 80) * Math.min(1, rise / 80) * opacity;
+
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: baseX + wobble,
+              top: height - rise,
+              width: size + (i % 3) * 0.5,
+              height: size + (i % 3) * 0.5,
+              borderRadius: "50%",
+              background: color,
+              opacity: particleOpacity,
+              pointerEvents: "none",
+            }}
+          />
+        );
+      })}
+    </>
+  );
+};
+
+// VignetteOverlay — radial dark gradient framing
+export const VignetteOverlay: React.FC<{
+  strength?: number;
+}> = ({strength = 0.7}) => {
+  return (
+    <AbsoluteFill
+      style={{
+        background: `radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,${strength}) 100%)`,
+        pointerEvents: "none",
+      }}
+    />
+  );
+};
+
+// AmbientGrid — subtle breathing grid overlay
+export const AmbientGrid: React.FC<{
+  color?: string;
+  baseOpacity?: number;
+  cellSize?: number;
+}> = ({color = "#fff", baseOpacity = 0.04, cellSize = 84}) => {
+  const frame = useCurrentFrame();
+  const breath = 0.7 + Math.sin(frame * 0.015) * 0.3;
+
+  return (
+    <AbsoluteFill
+      style={{
+        backgroundImage: `linear-gradient(${color}${Math.round(baseOpacity * breath * 255).toString(16).padStart(2, "0")} 1px, transparent 1px), linear-gradient(90deg, ${color}${Math.round(baseOpacity * breath * 255).toString(16).padStart(2, "0")} 1px, transparent 1px)`,
+        backgroundSize: `${cellSize}px ${cellSize}px`,
+        pointerEvents: "none",
+      }}
+    />
+  );
+};
+

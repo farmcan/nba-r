@@ -4,9 +4,15 @@ import {TeamTheme} from "../../themes/teams";
 import {MatchupPreviewData} from "../../types/matchup";
 import {
   BottomTicker,
+  CourtBg,
+  CourtLines,
+  NBAScoreBug,
+  ParticleField,
   SceneChrome,
   SceneProgress,
+  SlashDivider,
   TeamStrip,
+  VignetteOverlay,
   getSceneTint,
   neutral,
   resolveTheme,
@@ -34,11 +40,25 @@ export const IntroHero: React.FC<{
   return (
     <AbsoluteFill
       style={sceneBackground(
-        getSceneTint(homeTheme, 0.34),
-        getSceneTint(awayTheme, 0.3),
+        getSceneTint(homeTheme, 0.2),
+        getSceneTint(awayTheme, 0.16),
       )}
     >
+      <CourtBg src="assets/court.jpg" opacity={0.1} scale={1.05} />
+      <CourtLines color="rgba(255,255,255,0.03)" opacity={0.5} />
+      <ParticleField count={30} speed={0.4} opacity={0.25} />
+      <VignetteOverlay strength={0.4} />
+
       <SceneChrome homeTheme={homeTheme} awayTheme={awayTheme} />
+      <NBAScoreBug
+        homeCity={data.teams.home.city}
+        awayCity={data.teams.away.city}
+        homeSeed={data.teams.home.seed}
+        awaySeed={data.teams.away.seed}
+        contextLabel={data.contextLabel}
+      />
+      <SlashDivider color={`${homeTheme.colors.primary}08`} width={2} angle={-25} />
+      <SlashDivider color={`${awayTheme.colors.secondary}06`} width={2} angle={25} />
       <AbsoluteFill>
         <Img
           src={staticFile("assets/court.jpg")}
@@ -101,18 +121,46 @@ export const IntroHero: React.FC<{
         <div
           style={{
             marginTop: 22,
-            color: neutral.cream,
             fontFamily: '"Noto Sans SC", sans-serif',
             fontWeight: 900,
             fontSize: 142,
             lineHeight: 0.92,
             transform: `translateY(${titleY}px) scale(${0.88 + reveal * 0.12})`,
-            opacity: reveal,
           }}
         >
-          {data.teams.home.name}
+          <span
+            style={{
+              color: homeTheme.colors.primary,
+              opacity: interpolate(frame, [8, 22], [0, 1], {extrapolateRight: "clamp"}),
+              transform: `translateX(${interpolate(frame, [8, 22], [-40, 0], {extrapolateRight: "clamp"})}px)`,
+              display: "inline-block",
+            }}
+          >
+            {data.teams.home.name}
+          </span>
           <br />
-          VS {data.teams.away.name}
+          <span
+            style={{
+              color: "rgba(244,239,230,0.5)",
+              fontSize: 80,
+              margin: "0 12px",
+              opacity: interpolate(frame, [16, 30], [0, 1], {extrapolateRight: "clamp"}),
+              transform: `scale(${interpolate(frame, [16, 30], [0.6, 1], {extrapolateRight: "clamp"})})`,
+              display: "inline-block",
+            }}
+          >
+            VS
+          </span>
+          <span
+            style={{
+              color: awayTheme.colors.secondary,
+              opacity: interpolate(frame, [14, 28], [0, 1], {extrapolateRight: "clamp"}),
+              transform: `translateX(${interpolate(frame, [14, 28], [40, 0], {extrapolateRight: "clamp"})}px)`,
+              display: "inline-block",
+            }}
+          >
+            {data.teams.away.name}
+          </span>
         </div>
         <div
           style={{
