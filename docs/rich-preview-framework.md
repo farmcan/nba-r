@@ -103,3 +103,7 @@ Because the content can now be thicker, future template variants should support:
 - tactical chalkboard scenes
 
 This lets the repo scale from a light preview to a deeper editorial package without rewriting the research workflow.
+
+For the actual editorial standard, also follow:
+
+- `docs/analysis-framework.md`

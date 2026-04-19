@@ -98,6 +98,7 @@ Preferred buckets:
 Reference:
 
 - `docs/rich-preview-framework.md`
+- `docs/analysis-framework.md`
 
 ## Playoff panorama rule
 

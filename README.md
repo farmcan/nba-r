@@ -59,6 +59,7 @@ Type-check:
 - `docs/research-and-sourcing.md`
 - `docs/system-architecture.md`
 - `docs/animation-system.md`
+- `docs/analysis-framework.md`
 - `docs/ai-runbook.md`
 - `docs/playoff-panorama.md`
 - `docs/rich-preview-framework.md`
