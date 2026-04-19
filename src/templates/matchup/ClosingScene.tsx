@@ -5,6 +5,7 @@ import {MatchupPreviewData} from "../../types/matchup";
 import {
   BottomTicker,
   SceneChrome,
+  SceneProgress,
   getSceneTint,
   neutral,
   sceneBackground,
@@ -14,7 +15,8 @@ export const ClosingScene: React.FC<{
   data: MatchupPreviewData;
   homeTheme: TeamTheme;
   awayTheme: TeamTheme;
-}> = ({data, homeTheme, awayTheme}) => {
+  durationInFrames: number;
+}> = ({data, homeTheme, awayTheme, durationInFrames}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const reveal = spring({
@@ -48,16 +50,16 @@ export const ClosingScene: React.FC<{
           <div
             style={{
               color: neutral.cream,
-              fontFamily: '"Anton", sans-serif',
-              fontSize: 178,
-              lineHeight: 0.84,
-              textTransform: "uppercase",
+              fontFamily: '"Noto Sans SC", sans-serif',
+              fontWeight: 900,
+              fontSize: 132,
+              lineHeight: 0.96,
               textAlign: "center",
             }}
           >
             {data.schedule.game}
             <br />
-            PREVIEW
+            比赛前瞻
           </div>
           <Img
             src={staticFile(awayTheme.assets.logo)}
@@ -68,10 +70,9 @@ export const ClosingScene: React.FC<{
           style={{
             marginTop: 24,
             color: neutral.sky,
-            fontSize: 34,
+            fontSize: 32,
             fontWeight: 800,
-            letterSpacing: 6,
-            textTransform: "uppercase",
+            letterSpacing: 1,
             opacity: reveal,
           }}
         >
@@ -94,12 +95,13 @@ export const ClosingScene: React.FC<{
         </div>
       </AbsoluteFill>
       <BottomTicker
-        left="Reusable matchup template"
-        center={`${data.sources.length} verified references`}
-        right="Rendered with Remotion"
+        left="可复用对阵模板"
+        center={`${data.sources.length} 个真实来源`}
+        right="Remotion 渲染完成"
         homeTheme={homeTheme}
         awayTheme={awayTheme}
       />
+      <SceneProgress activeIndex={4} durationInFrames={durationInFrames} homeTheme={homeTheme} />
     </AbsoluteFill>
   );
 };

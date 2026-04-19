@@ -6,6 +6,7 @@ import {MatchupPreviewData, PlayerCard} from "../../types/matchup";
 import {
   BottomTicker,
   SceneChrome,
+  SceneProgress,
   getSceneTint,
   neutral,
   resolveTheme,
@@ -89,10 +90,10 @@ const PlayerCardPanel: React.FC<{
               <div
                 style={{
                   color: neutral.cream,
-                  fontFamily: '"Anton", sans-serif',
-                  fontSize: 48,
-                  lineHeight: 0.92,
-                  textTransform: "uppercase",
+                  fontFamily: '"Noto Sans SC", sans-serif',
+                  fontWeight: 900,
+                  fontSize: 38,
+                  lineHeight: 1,
                 }}
               >
                 {card.name}
@@ -101,10 +102,9 @@ const PlayerCardPanel: React.FC<{
                 style={{
                   marginTop: 8,
                   color: theme.colors.accent,
-                  fontSize: 24,
+                  fontSize: 22,
                   fontWeight: 700,
-                  letterSpacing: 2,
-                  textTransform: "uppercase",
+                  letterSpacing: 1,
                 }}
               >
                 {theme.city} {theme.name}
@@ -119,7 +119,6 @@ const PlayerCardPanel: React.FC<{
                   fontSize: 28,
                   fontWeight: 800,
                   letterSpacing: 1,
-                  textTransform: "uppercase",
                 }}
               >
                 {card.stat}
@@ -139,11 +138,10 @@ const PlayerCardPanel: React.FC<{
               style={{
                 color: "rgba(244,239,230,0.52)",
                 fontSize: 16,
-                letterSpacing: 1.4,
-                textTransform: "uppercase",
+                letterSpacing: 1,
               }}
             >
-              Source: {card.sourceLabel}
+              来源：{card.sourceLabel}
             </div>
           </div>
         </div>
@@ -155,7 +153,8 @@ export const PlayerCardDeckScene: React.FC<{
   data: MatchupPreviewData;
   homeTheme: TeamTheme;
   awayTheme: TeamTheme;
-}> = ({data, homeTheme, awayTheme}) => {
+  durationInFrames: number;
+}> = ({data, homeTheme, awayTheme, durationInFrames}) => {
   const frame = useCurrentFrame();
   const sweep = interpolate(frame, [0, 140], [360, -220], {
     extrapolateRight: "clamp",
@@ -205,27 +204,26 @@ export const PlayerCardDeckScene: React.FC<{
             <div
               style={{
                 color: neutral.sky,
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: 800,
-                letterSpacing: 8,
-                textTransform: "uppercase",
+                letterSpacing: 2,
               }}
             >
-              Primary creators
+              核心球星卡
             </div>
             <div
               style={{
                 marginTop: 20,
                 color: neutral.cream,
-                fontFamily: '"Anton", sans-serif',
-                fontSize: 130,
-                lineHeight: 0.84,
-                textTransform: "uppercase",
+                fontFamily: '"Noto Sans SC", sans-serif',
+                fontWeight: 900,
+                fontSize: 96,
+                lineHeight: 0.98,
               }}
             >
-              STAR
-              CARD
-              GRID
+              球星卡
+              <br />
+              平铺阵列
             </div>
             </div>
             <div
@@ -236,8 +234,8 @@ export const PlayerCardDeckScene: React.FC<{
                 paddingBottom: 18,
               }}
             >
-              A broadcast-style flat layout with staggered entrances, glow edges and stat chips.
-              Same data model, stronger presentation layer.
+              这段用更像体育包装的平铺卡组来呈现核心人物，
+              让信息密度、出场顺序和视觉冲击一起成立。
             </div>
           </div>
           <CameraMotionBlur shutterAngle={150} samples={6}>
@@ -263,11 +261,12 @@ export const PlayerCardDeckScene: React.FC<{
       </AbsoluteFill>
       <BottomTicker
         left={`${data.playerCards[0]?.name} • ${data.playerCards[1]?.name}`}
-        center="Flat hero cards with stagger + trail"
+        center="四卡平铺 + 分批进场"
         right={`${data.playerCards[2]?.name} • ${data.playerCards[3]?.name}`}
         homeTheme={homeTheme}
         awayTheme={awayTheme}
       />
+      <SceneProgress activeIndex={1} durationInFrames={durationInFrames} homeTheme={homeTheme} />
     </AbsoluteFill>
   );
 };

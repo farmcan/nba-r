@@ -30,6 +30,12 @@ Render the current matchup preview:
 ./node_modules/.bin/remotion render src/index.ts Celtics76ersPreviewExample out/celtics-76ers-preview.mp4 --browser-executable="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --concurrency=1
 ```
 
+Generate Chinese TTS locally:
+
+```bash
+scripts/generate-edge-tts.sh public/audio/celtics-sixers-zh-tts.mp3 docs/sample-tts.txt zh-CN-YunyangNeural
+```
+
 Type-check:
 
 ```bash
@@ -52,3 +58,6 @@ Type-check:
 - `docs/matchup-template.md`
 - `docs/research-and-sourcing.md`
 - `docs/system-architecture.md`
+- `docs/animation-system.md`
+- `docs/ai-runbook.md`
+- `docs/tts-workflow.md`

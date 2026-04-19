@@ -25,9 +25,9 @@ export type TeamTheme = {
 export const teamThemes: Record<TeamId, TeamTheme> = {
   bos: {
     teamId: "bos",
-    city: "Boston",
-    name: "Celtics",
-    shortName: "Boston",
+    city: "波士顿",
+    name: "凯尔特人",
+    shortName: "凯尔特人",
     colors: {
       primary: "#007A33",
       secondary: "#BA9653",
@@ -46,9 +46,9 @@ export const teamThemes: Record<TeamId, TeamTheme> = {
   },
   phi: {
     teamId: "phi",
-    city: "Philadelphia",
+    city: "费城",
     name: "76ers",
-    shortName: "Philadelphia",
+    shortName: "76人",
     colors: {
       primary: "#006BB6",
       secondary: "#ED174C",

@@ -69,6 +69,11 @@ export type MatchupPreviewData = {
     title: string;
     body: string;
   };
+  voiceover?: {
+    script: string;
+    audioSrc: string;
+    voice: string;
+  };
   closingNote: string;
   sources: SourceRef[];
 };

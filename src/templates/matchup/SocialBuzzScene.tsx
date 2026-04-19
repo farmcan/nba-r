@@ -5,6 +5,7 @@ import {MatchupPreviewData, SocialBuzz} from "../../types/matchup";
 import {
   BottomTicker,
   SceneChrome,
+  SceneProgress,
   getSceneTint,
   neutral,
   resolveTheme,
@@ -54,8 +55,7 @@ const BuzzCard: React.FC<{
               color: accent,
               fontSize: 20,
               fontWeight: 800,
-              letterSpacing: 3,
-              textTransform: "uppercase",
+              letterSpacing: 1,
             }}
           >
             {post.date}
@@ -77,11 +77,10 @@ const BuzzCard: React.FC<{
             marginTop: 24,
             color: "rgba(244,239,230,0.52)",
             fontSize: 16,
-            letterSpacing: 1.5,
-            textTransform: "uppercase",
+            letterSpacing: 1,
           }}
         >
-          Public chatter summarized from X posts
+          来自公开 X 帖文的讨论摘要
         </div>
     </div>
   );
@@ -91,7 +90,8 @@ export const SocialBuzzScene: React.FC<{
   data: MatchupPreviewData;
   homeTheme: TeamTheme;
   awayTheme: TeamTheme;
-}> = ({data, homeTheme, awayTheme}) => {
+  durationInFrames: number;
+}> = ({data, homeTheme, awayTheme, durationInFrames}) => {
   const frame = useCurrentFrame();
   const bandX = interpolate(frame, [0, 120], [420, -240], {
     extrapolateRight: "clamp",
@@ -122,27 +122,26 @@ export const SocialBuzzScene: React.FC<{
             <div
               style={{
                 color: neutral.sky,
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: 800,
-                letterSpacing: 8,
-                textTransform: "uppercase",
+                letterSpacing: 2,
               }}
             >
-              Public conversation
+              社媒热度
             </div>
             <div
               style={{
                 marginTop: 18,
                 color: neutral.cream,
-                fontFamily: '"Anton", sans-serif',
-                fontSize: 126,
-                lineHeight: 0.84,
-                textTransform: "uppercase",
+                fontFamily: '"Noto Sans SC", sans-serif',
+                fontWeight: 900,
+                fontSize: 86,
+                lineHeight: 0.98,
               }}
             >
-              X
+              X 上最近
               <br />
-              BUZZ
+              都在聊什么
             </div>
             <div
               style={{
@@ -152,7 +151,7 @@ export const SocialBuzzScene: React.FC<{
                 lineHeight: 1.12,
               }}
             >
-              Social layer stays secondary to facts. It adds temperature, not fake analysis.
+              社媒层只负责补充温度，不负责替代事实分析。
             </div>
           </div>
           <div
@@ -177,11 +176,12 @@ export const SocialBuzzScene: React.FC<{
       </AbsoluteFill>
       <BottomTicker
         left="@NBA"
-        center="Social tone, not invented lore"
-        right="Recent X conversation"
+        center="只补充氛围，不制造虚构剧情"
+        right="最近 X 讨论"
         homeTheme={homeTheme}
         awayTheme={awayTheme}
       />
+      <SceneProgress activeIndex={3} durationInFrames={durationInFrames} homeTheme={homeTheme} />
     </AbsoluteFill>
   );
 };

@@ -5,6 +5,7 @@ import {MatchupPreviewData} from "../../types/matchup";
 import {
   BottomTicker,
   SceneChrome,
+  SceneProgress,
   TeamStrip,
   getSceneTint,
   neutral,
@@ -16,7 +17,8 @@ export const IntroHero: React.FC<{
   data: MatchupPreviewData;
   homeTheme: TeamTheme;
   awayTheme: TeamTheme;
-}> = ({data, homeTheme, awayTheme}) => {
+  durationInFrames: number;
+}> = ({data, homeTheme, awayTheme, durationInFrames}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const reveal = spring({
@@ -55,8 +57,9 @@ export const IntroHero: React.FC<{
           left: -80,
           top: 170,
           color: `${homeTheme.colors.primary}33`,
-          fontFamily: '"Anton", sans-serif',
-          fontSize: 280,
+          fontFamily: '"Noto Sans SC", sans-serif',
+          fontWeight: 900,
+          fontSize: 184,
           lineHeight: 0.82,
           transform: "rotate(-90deg)",
           transformOrigin: "top left",
@@ -70,8 +73,9 @@ export const IntroHero: React.FC<{
           right: -80,
           bottom: 140,
           color: `${awayTheme.colors.secondary}30`,
-          fontFamily: '"Anton", sans-serif',
-          fontSize: 250,
+          fontFamily: '"Noto Sans SC", sans-serif',
+          fontWeight: 900,
+          fontSize: 172,
           lineHeight: 0.82,
           transform: "rotate(90deg)",
           transformOrigin: "bottom right",
@@ -84,10 +88,9 @@ export const IntroHero: React.FC<{
         <div
           style={{
             color: neutral.sky,
-            fontSize: 34,
+            fontSize: 30,
             fontWeight: 800,
-            letterSpacing: 8,
-            textTransform: "uppercase",
+            letterSpacing: 2,
             opacity: interpolate(frame, [0, 20], [0, 1], {
               extrapolateRight: "clamp",
             }),
@@ -99,10 +102,10 @@ export const IntroHero: React.FC<{
           style={{
             marginTop: 22,
             color: neutral.cream,
-            fontFamily: '"Anton", sans-serif',
-            fontSize: 176,
-            lineHeight: 0.86,
-            textTransform: "uppercase",
+            fontFamily: '"Noto Sans SC", sans-serif',
+            fontWeight: 900,
+            fontSize: 142,
+            lineHeight: 0.92,
             transform: `translateY(${titleY}px) scale(${0.88 + reveal * 0.12})`,
             opacity: reveal,
           }}
@@ -133,8 +136,7 @@ export const IntroHero: React.FC<{
                 color: neutral.cream,
                 fontSize: 28,
                 fontWeight: 700,
-                letterSpacing: 2,
-                textTransform: "uppercase",
+                letterSpacing: 1,
               }}
             >
               {chip}
@@ -179,12 +181,13 @@ export const IntroHero: React.FC<{
         </div>
       </AbsoluteFill>
       <BottomTicker
-        left={`${data.teams.home.name} #${data.teams.home.seed}`}
-        center={data.schedule.seasonSeries ?? "Series intel"}
-        right={`${data.teams.away.name} #${data.teams.away.seed}`}
+        left={`${data.teams.home.name} ${data.teams.home.seed} 号种子`}
+        center={data.schedule.seasonSeries ?? "系列赛信息"}
+        right={`${data.teams.away.name} ${data.teams.away.seed} 号种子`}
         homeTheme={homeTheme}
         awayTheme={awayTheme}
       />
+      <SceneProgress activeIndex={0} durationInFrames={durationInFrames} homeTheme={homeTheme} />
     </AbsoluteFill>
   );
 };

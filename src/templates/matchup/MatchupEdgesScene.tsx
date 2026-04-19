@@ -6,6 +6,7 @@ import {MatchupEdge, MatchupPreviewData} from "../../types/matchup";
 import {
   BottomTicker,
   SceneChrome,
+  SceneProgress,
   getSceneTint,
   neutral,
   resolveTheme,
@@ -44,10 +45,9 @@ const EdgePanel: React.FC<{
       <div
         style={{
           color: accent,
-          fontSize: 28,
+          fontSize: 24,
           fontWeight: 800,
-          letterSpacing: 4,
-          textTransform: "uppercase",
+          letterSpacing: 1,
         }}
       >
         {edge.eyebrow}
@@ -56,10 +56,10 @@ const EdgePanel: React.FC<{
         style={{
           marginTop: 16,
           color: neutral.cream,
-          fontFamily: '"Anton", sans-serif',
-          fontSize: 64,
-          lineHeight: 0.92,
-          textTransform: "uppercase",
+          fontFamily: '"Noto Sans SC", sans-serif',
+          fontWeight: 900,
+          fontSize: 50,
+          lineHeight: 1.02,
         }}
       >
         {edge.headline}
@@ -82,7 +82,8 @@ export const MatchupEdgesScene: React.FC<{
   data: MatchupPreviewData;
   homeTheme: TeamTheme;
   awayTheme: TeamTheme;
-}> = ({data, homeTheme, awayTheme}) => {
+  durationInFrames: number;
+}> = ({data, homeTheme, awayTheme, durationInFrames}) => {
   return (
     <AbsoluteFill
       style={sceneBackground(
@@ -97,29 +98,28 @@ export const MatchupEdgesScene: React.FC<{
             <div
               style={{
                 color: neutral.sky,
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: 800,
-                letterSpacing: 8,
-                textTransform: "uppercase",
+                letterSpacing: 2,
               }}
             >
-              What swings it
+              胜负手
             </div>
             <div
               style={{
                 marginTop: 20,
                 color: neutral.cream,
-                fontFamily: '"Anton", sans-serif',
-                fontSize: 122,
-                lineHeight: 0.84,
-                textTransform: "uppercase",
+                fontFamily: '"Noto Sans SC", sans-serif',
+                fontWeight: 900,
+                fontSize: 86,
+                lineHeight: 0.98,
               }}
             >
-              REAL
+              真正决定
               <br />
-              SERIES
+              这轮走势的
               <br />
-              EDGES
+              三个点
             </div>
             <div
               style={{
@@ -134,8 +134,7 @@ export const MatchupEdgesScene: React.FC<{
                   color: neutral.sky,
                   fontSize: 22,
                   fontWeight: 800,
-                  letterSpacing: 4,
-                  textTransform: "uppercase",
+                  letterSpacing: 1,
                 }}
               >
                 {data.sourceSlate.title}
@@ -175,13 +174,13 @@ export const MatchupEdgesScene: React.FC<{
         </div>
       </AbsoluteFill>
       <BottomTicker
-        left="Official playoff preview"
-        center="Injury report and matchup structure"
-        right={`${data.sources.length} sourced references`}
+        left="官方季后赛前瞻"
+        center="伤病信息 + 对位结构"
+        right={`${data.sources.length} 个已落地来源`}
         homeTheme={homeTheme}
         awayTheme={awayTheme}
       />
+      <SceneProgress activeIndex={2} durationInFrames={durationInFrames} homeTheme={homeTheme} />
     </AbsoluteFill>
   );
 };
-

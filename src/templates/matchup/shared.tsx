@@ -1,5 +1,5 @@
 import React from "react";
-import {AbsoluteFill, Img, staticFile} from "remotion";
+import {AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame} from "remotion";
 import {getTeamTheme, TeamTheme} from "../../themes/teams";
 import {MatchupPreviewData, TeamId} from "../../types/matchup";
 
@@ -8,6 +8,8 @@ export const neutral = {
   ink: "#07111B",
   sky: "#8FC2FF",
 };
+
+export const sectionLabels = ["开场", "球星卡", "胜负手", "热度", "收尾"];
 
 export const getSceneTint = (theme: TeamTheme, alpha: number): string => {
   const hex = theme.colors.primary.replace("#", "");
@@ -201,8 +203,7 @@ export const BottomTicker: React.FC<{
             color: neutral.cream,
             fontSize: 20,
             fontWeight: 700,
-            letterSpacing: 2,
-            textTransform: "uppercase",
+            letterSpacing: 1,
             boxShadow: `inset 0 0 0 1px ${item.color}33`,
           }}
         >
@@ -213,3 +214,92 @@ export const BottomTicker: React.FC<{
   );
 };
 
+export const SceneProgress: React.FC<{
+  activeIndex: number;
+  durationInFrames: number;
+  homeTheme: TeamTheme;
+}> = ({activeIndex, durationInFrames, homeTheme}) => {
+  const frame = useCurrentFrame();
+  const currentProgress = interpolate(
+    frame,
+    [0, Math.max(1, durationInFrames - 1)],
+    [0, 1],
+    {extrapolateLeft: "clamp", extrapolateRight: "clamp"},
+  );
+  const mascotHop = Math.sin(frame / 4) * 8;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        right: 62,
+        top: 118,
+        width: 320,
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+      }}
+    >
+      {sectionLabels.map((label, index) => {
+        const barProgress =
+          index < activeIndex ? 1 : index > activeIndex ? 0 : currentProgress;
+
+        return (
+          <div
+            key={label}
+            style={{
+              padding: "12px 14px 14px",
+              background: "rgba(5,12,20,0.68)",
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
+          >
+            <div
+              style={{
+                color: index === activeIndex ? neutral.cream : "rgba(244,239,230,0.6)",
+                fontSize: 18,
+                fontWeight: 800,
+                letterSpacing: 1,
+              }}
+            >
+              {label}
+            </div>
+            <div
+              style={{
+                position: "relative",
+                marginTop: 10,
+                height: 12,
+                borderRadius: 999,
+                background: "rgba(255,255,255,0.08)",
+                overflow: "visible",
+              }}
+            >
+              <div
+                style={{
+                  width: `${barProgress * 100}%`,
+                  height: "100%",
+                  borderRadius: 999,
+                  background: `linear-gradient(90deg, ${homeTheme.colors.primary}, ${homeTheme.colors.secondary})`,
+                  boxShadow: `0 0 22px ${homeTheme.colors.primary}88`,
+                }}
+              />
+              {index === activeIndex ? (
+                <Img
+                  src={staticFile(homeTheme.assets.logo)}
+                  style={{
+                    position: "absolute",
+                    left: `calc(${barProgress * 100}% - 16px)`,
+                    top: -22 + mascotHop,
+                    width: 34,
+                    height: 34,
+                    objectFit: "contain",
+                    filter: "drop-shadow(0 8px 12px rgba(0,0,0,0.4))",
+                  }}
+                />
+              ) : null}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
