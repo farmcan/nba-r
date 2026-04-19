@@ -187,7 +187,7 @@ export const IntroHero: React.FC<{
         homeTheme={homeTheme}
         awayTheme={awayTheme}
       />
-      <SceneProgress activeIndex={0} durationInFrames={durationInFrames} homeTheme={homeTheme} />
+      <SceneProgress activeIndex={1} durationInFrames={durationInFrames} homeTheme={homeTheme} />
     </AbsoluteFill>
   );
 };

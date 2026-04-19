@@ -7,17 +7,18 @@ import {wipe} from "@remotion/transitions/wipe";
 import {TeamTheme} from "../themes/teams";
 import {MatchupPreviewData} from "../types/matchup";
 import {ClosingScene} from "./matchup/ClosingScene";
+import {DeepAnalysisScene} from "./matchup/DeepAnalysisScene";
 import {IntroHero} from "./matchup/IntroHero";
 import {MatchupEdgesScene} from "./matchup/MatchupEdgesScene";
 import {PlayerCardDeckScene} from "./matchup/PlayerCardDeckScene";
-import {SocialBuzzScene} from "./matchup/SocialBuzzScene";
+import {PlayoffPanoramaScene} from "./matchup/PlayoffPanoramaScene";
+import {TacticalBoardScene} from "./matchup/TacticalBoardScene";
 import {neutral} from "./matchup/shared";
 
 export type MatchupPreviewTemplateProps = {
   data: MatchupPreviewData;
   homeTheme: TeamTheme;
   awayTheme: TeamTheme;
-  mode?: "broadcast" | "social";
 };
 
 const transitionTiming = springTiming({
@@ -38,58 +39,82 @@ export const MatchupPreviewTemplate: React.FC<MatchupPreviewTemplateProps> = ({
 
   return (
     <AbsoluteFill style={{backgroundColor: neutral.ink}}>
-      <Audio src={staticFile("audio/pulse.mp3")} volume={hasVoiceover ? 0.18 : 0.52} loop />
+      <Audio src={staticFile("audio/pulse.mp3")} volume={() => hasVoiceover ? 0.18 : 0.52} loop />
       {hasVoiceover ? (
         <Audio src={staticFile(data.voiceover!.audioSrc)} volume={1} />
       ) : null}
       <TransitionSeries>
-        <TransitionSeries.Sequence durationInFrames={150} name="Intro Hero">
+        <TransitionSeries.Sequence durationInFrames={205} name="Playoff Panorama">
+          <PlayoffPanoramaScene
+            data={data}
+            homeTheme={homeTheme}
+            awayTheme={awayTheme}
+            durationInFrames={205}
+          />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition
+          timing={transitionTiming}
+          presentation={slide({direction: "from-right"})}
+        />
+        <TransitionSeries.Sequence durationInFrames={220} name="Intro Hero">
           <IntroHero
             data={data}
             homeTheme={homeTheme}
             awayTheme={awayTheme}
-            durationInFrames={150}
+            durationInFrames={220}
           />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           timing={transitionTiming}
           presentation={wipe({direction: "from-right"})}
         />
-        <TransitionSeries.Sequence durationInFrames={180} name="Player Cards">
+        <TransitionSeries.Sequence durationInFrames={250} name="Player Cards">
           <PlayerCardDeckScene
             data={data}
             homeTheme={homeTheme}
             awayTheme={awayTheme}
-            durationInFrames={180}
+            durationInFrames={250}
           />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           timing={transitionTiming}
           presentation={slide({direction: "from-bottom"})}
         />
-        <TransitionSeries.Sequence durationInFrames={150} name="Matchup Edges">
+        <TransitionSeries.Sequence durationInFrames={225} name="Matchup Edges">
           <MatchupEdgesScene
             data={data}
             homeTheme={homeTheme}
             awayTheme={awayTheme}
-            durationInFrames={150}
+            durationInFrames={225}
           />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           timing={transitionTiming}
           presentation={fade()}
         />
-        <TransitionSeries.Sequence durationInFrames={130} name="Social Buzz">
-          <SocialBuzzScene
+        <TransitionSeries.Sequence durationInFrames={240} name="Deep Analysis">
+          <DeepAnalysisScene
             data={data}
             homeTheme={homeTheme}
             awayTheme={awayTheme}
-            durationInFrames={130}
+            durationInFrames={240}
           />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           timing={transitionTiming}
-          presentation={wipe({direction: "from-top-left"})}
+          presentation={wipe({direction: "from-bottom-left"})}
+        />
+        <TransitionSeries.Sequence durationInFrames={250} name="Tactical Board">
+          <TacticalBoardScene
+            data={data}
+            homeTheme={homeTheme}
+            awayTheme={awayTheme}
+            durationInFrames={250}
+          />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition
+          timing={transitionTiming}
+          presentation={fade()}
         />
         <TransitionSeries.Sequence durationInFrames={150} name="Closing">
           <ClosingScene

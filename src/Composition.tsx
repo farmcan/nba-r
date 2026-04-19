@@ -509,8 +509,8 @@ const NoisePass: React.FC = () => {
 export const MyComposition: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: palette.ink }}>
-      <Audio src={staticFile("audio/pulse.mp3")} volume={0.45} loop />
-      <Sequence from={0} durationInFrames={120}>
+      <Audio src={staticFile("audio/pulse.mp3")} volume={() => 0.45} loop />
+      <Sequence durationInFrames={120}>
         <Intro />
       </Sequence>
       <Sequence from={110} durationInFrames={150}>

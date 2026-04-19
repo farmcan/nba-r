@@ -180,7 +180,7 @@ export const MatchupEdgesScene: React.FC<{
         homeTheme={homeTheme}
         awayTheme={awayTheme}
       />
-      <SceneProgress activeIndex={2} durationInFrames={durationInFrames} homeTheme={homeTheme} />
+      <SceneProgress activeIndex={3} durationInFrames={durationInFrames} homeTheme={homeTheme} />
     </AbsoluteFill>
   );
 };

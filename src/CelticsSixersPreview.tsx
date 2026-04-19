@@ -9,7 +9,6 @@ export const CelticsSixersPreview: React.FC = () => {
       data={celticsSixersPreview}
       homeTheme={getTeamTheme(celticsSixersPreview.teams.home.teamId)}
       awayTheme={getTeamTheme(celticsSixersPreview.teams.away.teamId)}
-      mode="broadcast"
     />
   );
 };

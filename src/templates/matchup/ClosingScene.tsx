@@ -101,7 +101,7 @@ export const ClosingScene: React.FC<{
         homeTheme={homeTheme}
         awayTheme={awayTheme}
       />
-      <SceneProgress activeIndex={4} durationInFrames={durationInFrames} homeTheme={homeTheme} />
+      <SceneProgress activeIndex={6} durationInFrames={durationInFrames} homeTheme={homeTheme} />
     </AbsoluteFill>
   );
 };

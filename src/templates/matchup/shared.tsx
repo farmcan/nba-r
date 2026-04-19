@@ -1,7 +1,5 @@
 import React from "react";
 import {AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame} from "remotion";
-import {getTeamTheme, TeamTheme} from "../../themes/teams";
-import {MatchupPreviewData, TeamId} from "../../types/matchup";
 
 export const neutral = {
   cream: "#F4EFE6",
@@ -9,9 +7,7 @@ export const neutral = {
   sky: "#8FC2FF",
 };
 
-export const sectionLabels = ["开场", "球星卡", "胜负手", "热度", "收尾"];
-
-export const getSceneTint = (theme: TeamTheme, alpha: number): string => {
+export const getSceneTint = (theme: { colors: { primary: string } }, alpha: number): string => {
   const hex = theme.colors.primary.replace("#", "");
   const r = Number.parseInt(hex.slice(0, 2), 16);
   const g = Number.parseInt(hex.slice(2, 4), 16);
@@ -45,8 +41,8 @@ export const GridOverlay: React.FC<{opacity?: number}> = ({opacity = 0.18}) => {
 };
 
 export const SceneChrome: React.FC<{
-  homeTheme: TeamTheme;
-  awayTheme: TeamTheme;
+  homeTheme: { colors: { primary: string; secondary: string }; motifs: { gridOpacity: number; stripeAngle: number } };
+  awayTheme: { colors: { secondary: string }; motifs: { gridOpacity: number; stripeAngle: number } };
 }> = ({homeTheme, awayTheme}) => {
   return (
     <>
@@ -98,30 +94,28 @@ export const SceneChrome: React.FC<{
   );
 };
 
+type ThemeLike = {
+  teamId?: string;
+  city?: string;
+  name?: string;
+  colors: { primary: string; secondary?: string; accent?: string; ink?: string };
+};
+
 export const resolveTheme = (
-  teamId: TeamId | undefined,
-  homeTheme: TeamTheme,
-  awayTheme: TeamTheme,
-): TeamTheme | null => {
-  if (!teamId) {
-    return null;
-  }
-
-  if (teamId === homeTheme.teamId) {
-    return homeTheme;
-  }
-
-  if (teamId === awayTheme.teamId) {
-    return awayTheme;
-  }
-
-  return getTeamTheme(teamId);
+  teamId: string | undefined,
+  homeTheme: ThemeLike,
+  awayTheme: ThemeLike,
+): ThemeLike | null => {
+  if (!teamId) return null;
+  if (teamId === homeTheme.teamId) return homeTheme;
+  if (teamId === awayTheme.teamId) return awayTheme;
+  return { colors: { primary: "#aaa", secondary: "#666" } };
 };
 
 export const TeamStrip: React.FC<{
-  data: MatchupPreviewData;
-  homeTheme: TeamTheme;
-  awayTheme: TeamTheme;
+  data: { teams: { home: { city: string }; away: { city: string } }; contextLabel: string };
+  homeTheme: { assets: { logo: string } };
+  awayTheme: { assets: { logo: string } };
 }> = ({data, homeTheme, awayTheme}) => {
   return (
     <div
@@ -174,8 +168,8 @@ export const BottomTicker: React.FC<{
   left: string;
   center: string;
   right: string;
-  homeTheme: TeamTheme;
-  awayTheme: TeamTheme;
+  homeTheme: { colors: { primary: string } };
+  awayTheme: { colors: { secondary: string } };
 }> = ({left, center, right, homeTheme, awayTheme}) => {
   return (
     <div
@@ -217,99 +211,135 @@ export const BottomTicker: React.FC<{
 export const SceneProgress: React.FC<{
   activeIndex: number;
   durationInFrames: number;
-  homeTheme: TeamTheme;
-}> = ({activeIndex, durationInFrames, homeTheme}) => {
+  homeTheme: { colors: { primary: string; secondary: string } };
+  labels?: string[];
+}> = ({activeIndex, durationInFrames, homeTheme, labels}) => {
   const frame = useCurrentFrame();
+  const sectionLabels = labels ?? ["全景", "对阵", "球星", "胜负手", "分析", "战术", "收尾"];
+  const totalSections = sectionLabels.length;
+
   const currentProgress = interpolate(
     frame,
     [0, Math.max(1, durationInFrames - 1)],
     [0, 1],
     {extrapolateLeft: "clamp", extrapolateRight: "clamp"},
   );
-  const mascotHop = Math.sin(frame / 4) * 8;
+
+  const overallPct = ((activeIndex + currentProgress) / (totalSections - 1)) * 100;
 
   return (
     <div
       style={{
         position: "absolute",
-        left: 82,
-        right: 82,
-        bottom: 96,
-        height: 62,
+        left: 96,
+        right: 96,
+        bottom: 48,
+        height: 40,
+        display: "flex",
+        alignItems: "flex-end",
+        gap: 0,
       }}
     >
+      {/* Thin track */}
       <div
         style={{
           position: "absolute",
           left: 0,
           right: 0,
-          top: 30,
-          height: 8,
-          borderRadius: 999,
-          background: "rgba(255,255,255,0.14)",
+          bottom: 0,
+          height: 3,
+          borderRadius: 2,
+          background: "rgba(255,255,255,0.08)",
           overflow: "hidden",
         }}
       >
+        {/* Filled portion with soft glow */}
         <div
           style={{
-            width: `${((activeIndex + currentProgress) / (sectionLabels.length - 1)) * 100}%`,
+            width: `${overallPct}%`,
             height: "100%",
-            borderRadius: 999,
+            borderRadius: 2,
             background: `linear-gradient(90deg, ${homeTheme.colors.primary}, ${homeTheme.colors.secondary})`,
-            boxShadow: `0 0 24px ${homeTheme.colors.primary}88`,
+            boxShadow: `0 0 12px ${homeTheme.colors.primary}44`,
           }}
         />
       </div>
+
+      {/* Section dots + labels */}
       {sectionLabels.map((label, index) => {
-        const left = `${(index / (sectionLabels.length - 1)) * 100}%`;
+        const leftPct = (index / (totalSections - 1)) * 100;
         const isDone = index < activeIndex;
         const isActive = index === activeIndex;
+        const dotScale = isActive
+          ? interpolate(frame, [0, 20], [0.7, 1], {extrapolateRight: "clamp"})
+          : 1;
+        const labelOpacity = isActive
+          ? interpolate(frame, [0, 24], [0.3, 1], {extrapolateRight: "clamp"})
+          : isDone
+            ? 0.65
+            : 0.3;
 
         return (
           <React.Fragment key={label}>
+            {/* Label */}
             <div
               style={{
                 position: "absolute",
-                left,
-                top: 12,
+                left: `${leftPct}%`,
+                bottom: 20,
                 transform: "translateX(-50%)",
-                color: isActive ? neutral.cream : isDone ? "rgba(244,239,230,0.82)" : "rgba(244,239,230,0.42)",
-                fontSize: 16,
-                fontWeight: 800,
-                letterSpacing: 1,
+                color: neutral.cream,
+                fontSize: isActive ? 13 : 11,
+                fontWeight: isActive ? 700 : 500,
+                letterSpacing: 0.5,
                 whiteSpace: "nowrap",
+                opacity: labelOpacity,
               }}
             >
               {label}
             </div>
+            {/* Dot */}
             <div
               style={{
                 position: "absolute",
-                left,
-                top: 24,
-                width: 14,
-                height: 14,
+                left: `${leftPct}%`,
+                bottom: -2,
+                transform: `translateX(-50%) scale(${dotScale})`,
+                width: isActive ? 9 : 6,
+                height: isActive ? 9 : 6,
                 borderRadius: 999,
-                transform: "translateX(-50%)",
-                background: isActive || isDone ? homeTheme.colors.secondary : "rgba(255,255,255,0.18)",
-                boxShadow: isActive ? `0 0 18px ${homeTheme.colors.secondary}aa` : "none",
+                background: isActive || isDone
+                  ? homeTheme.colors.primary
+                  : "rgba(255,255,255,0.15)",
+                boxShadow: isActive
+                  ? `0 0 10px ${homeTheme.colors.primary}aa, 0 0 4px ${homeTheme.colors.primary}66`
+                  : "none",
               }}
             />
           </React.Fragment>
         );
       })}
-      <Img
-        src={staticFile(homeTheme.assets.logo)}
+
+      {/* Gliding indicator dot on the progress line */}
+      <div
         style={{
           position: "absolute",
-          left: `calc(${((activeIndex + currentProgress) / (sectionLabels.length - 1)) * 100}% - 17px)`,
-          top: -4 + mascotHop,
-          width: 36,
-          height: 36,
-          objectFit: "contain",
-          filter: "drop-shadow(0 8px 12px rgba(0,0,0,0.4))",
+          left: `${overallPct}%`,
+          bottom: -1,
+          transform: "translateX(-50%)",
+          width: 12,
+          height: 12,
+          borderRadius: 999,
+          background: neutral.cream,
+          boxShadow: `0 0 16px ${homeTheme.colors.primary}cc, 0 0 6px ${neutral.cream}88`,
+          opacity: isActiveDot(activeIndex, totalSections),
         }}
       />
     </div>
   );
+};
+
+const isActiveDot = (activeIndex: number, total: number): number => {
+  if (activeIndex >= total - 1) return 0.3;
+  return 1;
 };

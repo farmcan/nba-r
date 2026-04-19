@@ -3,6 +3,7 @@ import {CameraMotionBlur} from "@remotion/motion-blur";
 import {AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {TeamTheme} from "../../themes/teams";
 import {MatchupPreviewData, PlayerCard} from "../../types/matchup";
+import {PlayerSilhouettesRow} from "./PlayerSilhouettes";
 import {
   BottomTicker,
   SceneChrome,
@@ -168,6 +169,28 @@ export const PlayerCardDeckScene: React.FC<{
       )}
     >
       <SceneChrome homeTheme={homeTheme} awayTheme={awayTheme} />
+
+      {/* Background player silhouettes for visual depth */}
+      <div style={{position: "absolute", left: 60, bottom: 140, opacity: 0.05}}>
+        <PlayerSilhouettesRow
+          count={5}
+          poses={["dribble", "shoot", "pass", "defend", "dunk"]}
+          color={homeTheme.colors.primary}
+          width={90}
+          height={130}
+          opacity={0.4}
+        />
+      </div>
+      <div style={{position: "absolute", right: 60, bottom: 140, opacity: 0.04}}>
+        <PlayerSilhouettesRow
+          count={4}
+          poses={["defend", "pass", "shoot", "dribble"]}
+          color={awayTheme.colors.secondary}
+          width={80}
+          height={120}
+          opacity={0.4}
+        />
+      </div>
       <div
         style={{
           position: "absolute",
@@ -266,7 +289,7 @@ export const PlayerCardDeckScene: React.FC<{
         homeTheme={homeTheme}
         awayTheme={awayTheme}
       />
-      <SceneProgress activeIndex={1} durationInFrames={durationInFrames} homeTheme={homeTheme} />
+      <SceneProgress activeIndex={2} durationInFrames={durationInFrames} homeTheme={homeTheme} />
     </AbsoluteFill>
   );
 };
