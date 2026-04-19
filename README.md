@@ -3,11 +3,11 @@
 Reusable Remotion workspace for NBA videos.
 
 This repo is set up to handle repeatable matchup-preview requests, not just one-off edits.  
-The current example is a sourced `Celtics76ersPreview` composition built from local matchup data, official NBA sources, and a small public X-buzz layer.
+The current example is a sourced `Celtics76ersPreviewExample` composition built from a reusable matchup template, local matchup data, official NBA sources, and a small public X-buzz layer.
 
 ## Compositions
 
-- `Celtics76ersPreview`: data-driven playoff preview with animated player cards and matchup edges
+- `Celtics76ersPreviewExample`: data-driven playoff preview built on the generic matchup template
 - `NBAPlayoffPulse`: earlier style-study opener
 
 ## Commands
@@ -27,7 +27,7 @@ npm run dev -- --browser-executable="/Applications/Google Chrome.app/Contents/Ma
 Render the current matchup preview:
 
 ```bash
-./node_modules/.bin/remotion render src/index.ts Celtics76ersPreview out/celtics-76ers-preview.mp4 --browser-executable="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --concurrency=1
+./node_modules/.bin/remotion render src/index.ts Celtics76ersPreviewExample out/celtics-76ers-preview.mp4 --browser-executable="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --concurrency=1
 ```
 
 Type-check:
@@ -39,7 +39,9 @@ Type-check:
 ## Project layout
 
 - `src/data`: local source-of-truth for matchup facts and source links
-- `src/CelticsSixersPreview.tsx`: reusable scene system for preview videos
+- `src/templates`: generic render templates
+- `src/themes`: reusable team-level visual definitions
+- `src/CelticsSixersPreview.tsx`: thin example wrapper around the generic matchup template
 - `public/assets`: logos, player images, and other local media
 - `docs`: reusable workflow and sourcing notes for future requests
 

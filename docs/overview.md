@@ -5,7 +5,8 @@
 The current repo includes:
 
 - a generic hype opener: `NBAPlayoffPulse`
-- a sourced matchup template: `Celtics76ersPreview`
+- a generic matchup template: `MatchupPreviewTemplate`
+- a sourced example wrapper: `Celtics76ersPreviewExample`
 - local assets, local matchup data, and render output workflow
 
 The important design choice is that matchup claims live in local data modules, not inside scene code.  
@@ -14,7 +15,9 @@ That keeps future requests repeatable: swap data, update assets, keep the animat
 ## Current reusable pieces
 
 - `src/data/*`: matchup-specific facts, angles, social context, and source links
-- `src/CelticsSixersPreview.tsx`: reusable preview scene system
+- `src/templates/*`: reusable preview templates
+- `src/themes/*`: reusable team themes
+- `src/CelticsSixersPreview.tsx`: example composition wrapper
 - `public/assets/players`: player headshots for card layouts
 - `public/assets/logos`: team logos for brand blocks and intros
 - `public/audio`: reusable bed tracks
