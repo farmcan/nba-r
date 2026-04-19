@@ -232,74 +232,84 @@ export const SceneProgress: React.FC<{
     <div
       style={{
         position: "absolute",
-        right: 62,
-        top: 118,
-        width: 320,
-        display: "flex",
-        flexDirection: "column",
-        gap: 16,
+        left: 82,
+        right: 82,
+        bottom: 96,
+        height: 62,
       }}
     >
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 30,
+          height: 8,
+          borderRadius: 999,
+          background: "rgba(255,255,255,0.14)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            width: `${((activeIndex + currentProgress) / (sectionLabels.length - 1)) * 100}%`,
+            height: "100%",
+            borderRadius: 999,
+            background: `linear-gradient(90deg, ${homeTheme.colors.primary}, ${homeTheme.colors.secondary})`,
+            boxShadow: `0 0 24px ${homeTheme.colors.primary}88`,
+          }}
+        />
+      </div>
       {sectionLabels.map((label, index) => {
-        const barProgress =
-          index < activeIndex ? 1 : index > activeIndex ? 0 : currentProgress;
+        const left = `${(index / (sectionLabels.length - 1)) * 100}%`;
+        const isDone = index < activeIndex;
+        const isActive = index === activeIndex;
 
         return (
-          <div
-            key={label}
-            style={{
-              padding: "12px 14px 14px",
-              background: "rgba(5,12,20,0.68)",
-              border: "1px solid rgba(255,255,255,0.1)",
-            }}
-          >
+          <React.Fragment key={label}>
             <div
               style={{
-                color: index === activeIndex ? neutral.cream : "rgba(244,239,230,0.6)",
-                fontSize: 18,
+                position: "absolute",
+                left,
+                top: 12,
+                transform: "translateX(-50%)",
+                color: isActive ? neutral.cream : isDone ? "rgba(244,239,230,0.82)" : "rgba(244,239,230,0.42)",
+                fontSize: 16,
                 fontWeight: 800,
                 letterSpacing: 1,
+                whiteSpace: "nowrap",
               }}
             >
               {label}
             </div>
             <div
               style={{
-                position: "relative",
-                marginTop: 10,
-                height: 12,
+                position: "absolute",
+                left,
+                top: 24,
+                width: 14,
+                height: 14,
                 borderRadius: 999,
-                background: "rgba(255,255,255,0.08)",
-                overflow: "visible",
+                transform: "translateX(-50%)",
+                background: isActive || isDone ? homeTheme.colors.secondary : "rgba(255,255,255,0.18)",
+                boxShadow: isActive ? `0 0 18px ${homeTheme.colors.secondary}aa` : "none",
               }}
-            >
-              <div
-                style={{
-                  width: `${barProgress * 100}%`,
-                  height: "100%",
-                  borderRadius: 999,
-                  background: `linear-gradient(90deg, ${homeTheme.colors.primary}, ${homeTheme.colors.secondary})`,
-                  boxShadow: `0 0 22px ${homeTheme.colors.primary}88`,
-                }}
-              />
-              {index === activeIndex ? (
-                <Img
-                  src={staticFile(homeTheme.assets.logo)}
-                  style={{
-                    position: "absolute",
-                    left: `calc(${barProgress * 100}% - 16px)`,
-                    top: -22 + mascotHop,
-                    width: 34,
-                    height: 34,
-                    objectFit: "contain",
-                    filter: "drop-shadow(0 8px 12px rgba(0,0,0,0.4))",
-                  }}
-                />
-              ) : null}
-            </div>
-          </div>
+            />
+          </React.Fragment>
         );
       })}
+      <Img
+        src={staticFile(homeTheme.assets.logo)}
+        style={{
+          position: "absolute",
+          left: `calc(${((activeIndex + currentProgress) / (sectionLabels.length - 1)) * 100}% - 17px)`,
+          top: -4 + mascotHop,
+          width: 36,
+          height: 36,
+          objectFit: "contain",
+          filter: "drop-shadow(0 8px 12px rgba(0,0,0,0.4))",
+        }}
+      />
     </div>
   );
 };

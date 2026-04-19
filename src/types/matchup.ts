@@ -44,6 +44,68 @@ export type SocialBuzz = {
   teamId?: TeamId;
 };
 
+export type NarrativeThread = {
+  title: string;
+  summary: string;
+  teamId?: TeamId;
+  sourceLabel?: string;
+};
+
+export type HeadToHeadNote = {
+  label: string;
+  detail: string;
+  sourceLabel?: string;
+};
+
+export type RecentFormNote = {
+  label: string;
+  detail: string;
+  teamId?: TeamId;
+  sourceLabel?: string;
+};
+
+export type StyleProfile = {
+  teamId: TeamId;
+  identity: string;
+  offense: string;
+  defense: string;
+  tempo?: string;
+  sourceLabel?: string;
+};
+
+export type TacticalKey = {
+  title: string;
+  detail: string;
+  offenseTeamId?: TeamId;
+  defenseTeamId?: TeamId;
+  sourceLabel?: string;
+};
+
+export type BracketSeriesTeam = {
+  label: string;
+  seed: number;
+  wins: number;
+};
+
+export type BracketSeries = {
+  conference: "east" | "west";
+  round: "play-in" | "first-round" | "second-round" | "conference-finals" | "finals";
+  slot: string;
+  topTeam: BracketSeriesTeam;
+  bottomTeam: BracketSeriesTeam;
+  status: string;
+  sourceLabel?: string;
+};
+
+export type PlayoffPanorama = {
+  capturedAt: string;
+  overview: string;
+  eastHeadline: string;
+  westHeadline: string;
+  focusSeriesSlot?: string;
+  series: BracketSeries[];
+};
+
 export type MatchupPreviewData = {
   id: string;
   title: string;
@@ -65,6 +127,12 @@ export type MatchupPreviewData = {
   playerCards: PlayerCard[];
   matchupEdges: MatchupEdge[];
   socialBuzz: SocialBuzz[];
+  narrativeThreads?: NarrativeThread[];
+  headToHead?: HeadToHeadNote[];
+  recentForm?: RecentFormNote[];
+  styleProfiles?: StyleProfile[];
+  tacticalKeys?: TacticalKey[];
+  playoffPanorama?: PlayoffPanorama;
   sourceSlate: {
     title: string;
     body: string;

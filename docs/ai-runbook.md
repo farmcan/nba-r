@@ -16,12 +16,15 @@ Turn a matchup request into a repeatable Remotion video without inventing analys
 
 ## Standard workflow
 
-1. Research from official NBA sources and clearly marked public social context
+1. AI researches from official NBA sources and clearly marked public social context
 2. Create or update a matchup data file under `src/data/matchups`
 3. Localize copy if the request is Chinese
 4. Generate optional TTS audio and store it in `public/audio`
 5. Render through the generic composition, not through one-off scene files
 6. Save process notes in `docs` when the workflow changes
+
+The default assumption is that AI collects the information.
+Do not wait for the user to manually assemble research unless the request explicitly says otherwise.
 
 ## Current reusable system
 
@@ -78,3 +81,33 @@ scripts/generate-edge-tts.sh public/audio/sample.mp3 docs/sample-tts.txt zh-CN-Y
 - Add more output modes as template variants, not bespoke compositions
 - Update this runbook whenever the workflow becomes more capable
 
+## Richer content expectation
+
+Future previews should try to pull from more than one angle.
+
+Preferred buckets:
+
+- playoff panorama
+- player relationships
+- historical matchup context
+- recent form
+- style identity
+- tactical keys
+- social temperature
+
+Reference:
+
+- `docs/rich-preview-framework.md`
+
+## Playoff panorama rule
+
+If the request is for a playoff matchup, AI should try to start with a bracket-level scene.
+
+That means collecting:
+
+- current East and West first-round tree
+- current series score or Game 1 status
+- which branch contains the focus matchup
+- one short headline for each conference
+
+This should be treated as time-sensitive information and refreshed from current sources before rendering.
