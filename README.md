@@ -71,4 +71,5 @@ Type-check:
 - `docs/celtics-sixers-social-preview-plan.md`
 - `docs/design-references.md`
 - `docs/production-handbook.md`
+- `docs/user-persona.md`
 - `docs/nba-video-analysis.md`
