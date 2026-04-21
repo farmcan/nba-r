@@ -1,8 +1,8 @@
 # Analysis Framework
 
-This file defines what a "substantive" NBA matchup preview should contain.
+This file defines what a substantive `nba-r` matchup preview should contain.
 
-The goal is to stop future previews from being thin, generic, or nutritionally empty.
+The goal is to stop previews from collapsing into schedule cards, player-card spam, or generic "Team A has the edge" filler.
 
 ## Standard
 
@@ -16,7 +16,7 @@ It should explain why the matchup matters, what makes it unstable, and where the
 
 ## Required analysis buckets
 
-Future AI-generated matchup previews should try to cover these buckets.
+Use these buckets as the default editorial checklist.
 
 ### 1. Team state
 
@@ -159,6 +159,59 @@ Output style:
 
 - one high-level bracket context block before the matchup preview
 
+## Tactical-board standard
+
+When a matchup has enough real tactical material, add a `tacticalBoard` item instead of repeating the same point as generic copy.
+
+Each board item should capture:
+
+- `title`
+- `setup`
+- `trigger`
+- `read`
+- `counter`
+- offense or defense team mapping when needed
+- `sourceLabel`
+
+Good tactical-board prompts:
+
+- What action creates the first advantage?
+- Which defender or matchup gets hunted?
+- Where does the help defender come from?
+- Which shooter or screener is being ignored on purpose?
+- What is the most important counter once the first action is taken away?
+
+Good sources:
+
+- official playoff previews
+- official team pages
+- reliable tactical breakdowns
+- direct evidence from recent game recaps or matchup notes
+
+Do not invent a board sequence just to make the video look smarter.
+
+## Playoff-panorama standard
+
+For playoff videos, the preview should usually open with bracket context.
+
+Minimum `playoffPanorama` coverage:
+
+- `capturedAt`
+- `overview`
+- `eastHeadline`
+- `westHeadline`
+- `series`
+- `focusSeriesSlot` when one branch should be highlighted
+
+Collect:
+
+- current conference bracket pairings
+- current series scores
+- completed Game 1 or recent game results when available
+- where the focus series sits in the bracket
+
+This layer is time-sensitive and should be refreshed before rendering.
+
 ## Minimum quality bar
 
 A preview should not ship if it only contains:
@@ -199,3 +252,14 @@ It is:
 - facts organized into tension
 - stats translated into basketball meaning
 - stories tied back to how the game may actually be played
+
+## Practical use
+
+If a build feels thin, the first fix is usually not "add more scenes".
+
+It is one of:
+
+- upgrade the research quality
+- cut weaker cards and replace them with one stronger storyline
+- convert a generic edge into a specific tactical explanation
+- add bracket context when the game matters inside a larger playoff tree

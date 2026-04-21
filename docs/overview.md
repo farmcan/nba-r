@@ -1,35 +1,32 @@
-# nba-r
+# Docs Overview
 
-`nba-r` is a reusable Remotion workspace for NBA videos.
+This folder was trimmed down to keep only documents that still describe the current repo.
 
-The current repo includes:
+## Read these first
 
-- a generic hype opener: `NBAPlayoffPulse`
-- a generic matchup template: `MatchupPreviewTemplate`
-- a sourced example wrapper: `Celtics76ersPreviewExample`
-- local assets, local matchup data, and render output workflow
+- `ai-runbook.md`: operating workflow for turning a request into a renderable matchup package
+- `analysis-framework.md`: editorial standard for what a serious preview should contain
+- `production-handbook.md`: implementation notes and UI/animation pitfalls from real builds
 
-The important design choice is that matchup claims live in local data modules, not inside scene code.  
-That keeps future requests repeatable: swap data, update assets, keep the animation system.
+## Supporting references
 
-## Current reusable pieces
+- `design-references.md`: external packaging references and visual-system takeaways
+- `nba-video-analysis.md`: Chinese long-form notes on high-performing NBA video patterns
 
-- `src/data/*`: matchup-specific facts, angles, social context, and source links
-- `src/templates/*`: reusable preview templates
-- `src/themes/*`: reusable team themes
-- `src/CelticsSixersPreview.tsx`: example composition wrapper
-- `public/assets/players`: player headshots for card layouts
-- `public/assets/logos`: team logos for brand blocks and intros
-- `public/audio`: reusable bed tracks
+## Current system in one page
 
-## Core rule
+- Source-of-truth matchup data lives in `src/data/matchups`
+- The typed contract lives in `src/types/matchup.ts`
+- The reusable renderer lives in `src/templates/MatchupPreviewTemplate.tsx`
+- Team styling lives in `src/themes/teams.ts`
+- The example composition wrapper is `src/CelticsSixersPreview.tsx`
 
-Do not invent matchup analysis.
+## Documentation rule
 
-Every preview should be backed by one or more of:
+When the repo changes, update an existing core doc before adding a new one.
 
-- official NBA preview articles
-- official NBA game notes
-- official NBA injury reports
-- official NBA player or team pages
-- recent public X posts, clearly treated as social context rather than ground truth
+If a note is only useful for one build, keep it close to the code or remove it after the pattern is absorbed into:
+
+- `ai-runbook.md`
+- `analysis-framework.md`
+- `production-handbook.md`

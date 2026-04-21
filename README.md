@@ -1,13 +1,19 @@
 # nba-r
 
-Reusable Remotion workspace for NBA videos.
+Reusable Remotion workspace for NBA matchup videos.
 
-This repo is set up to handle repeatable matchup-preview requests, not just one-off edits.  
-The current example is a sourced `Celtics76ersPreviewExample` composition built from a reusable matchup template, local matchup data, official NBA sources, and a small public X-buzz layer.
+The repo is built around one repeatable path:
+
+1. research current matchup context
+2. store claims in typed local data
+3. render through the reusable template system
+
+The current example is `Celtics76ersPreviewExample`, backed by `src/data/matchups/celtics-sixers.ts` and rendered through `src/templates/MatchupPreviewTemplate.tsx`.
 
 ## Compositions
 
 - `Celtics76ersPreviewExample`: data-driven playoff preview built on the generic matchup template
+- `Celtics76ersSocialPreview`: short-form version of the same matchup for social distribution
 - `NBAPlayoffPulse`: earlier style-study opener
 
 ## Commands
@@ -28,6 +34,12 @@ Render the current matchup preview:
 
 ```bash
 ./node_modules/.bin/remotion render src/index.ts Celtics76ersPreviewExample out/celtics-76ers-preview.mp4 --browser-executable="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --concurrency=1
+```
+
+Render the short-form social preview:
+
+```bash
+./node_modules/.bin/remotion render src/index.ts Celtics76ersSocialPreview out/celtics-76ers-social-preview.mp4 --browser-executable="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --concurrency=1
 ```
 
 Generate Chinese TTS locally:
@@ -54,14 +66,8 @@ Type-check:
 ## Docs
 
 - `docs/overview.md`
-- `docs/design-references.md`
-- `docs/matchup-template.md`
-- `docs/research-and-sourcing.md`
-- `docs/system-architecture.md`
-- `docs/animation-system.md`
-- `docs/analysis-framework.md`
 - `docs/ai-runbook.md`
-- `docs/playoff-panorama.md`
-- `docs/rich-preview-framework.md`
-- `docs/tactical-board-layer.md`
-- `docs/tts-workflow.md`
+- `docs/analysis-framework.md`
+- `docs/design-references.md`
+- `docs/production-handbook.md`
+- `docs/nba-video-analysis.md`

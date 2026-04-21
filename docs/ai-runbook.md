@@ -1,58 +1,109 @@
 # AI Runbook
 
-This file is the local operating manual for future AI agents working on `nba-r`.
+This is the operating manual for turning a matchup request into a repeatable `nba-r` render.
 
 ## Goal
 
-Turn a matchup request into a repeatable Remotion video without inventing analysis.
+Turn a matchup request into a renderable video package without inventing claims or forking one-off scene code.
 
 ## Non-negotiables
 
-- Keep all claims in local data files under `src/data`
+- Keep all claims in local data files under `src/data/matchups`
 - Keep visual logic in reusable templates under `src/templates`
 - Keep team styling in `src/themes`
-- Store reusable workflow notes in `docs`
 - Render locally and keep final media in `out`
+- Treat social buzz as context, not ground truth
 
 ## Standard workflow
 
-1. AI researches from official NBA sources and clearly marked public social context
+1. Research from official NBA sources first, then add clearly marked public social context
 2. Create or update a matchup data file under `src/data/matchups`
-3. Localize copy if the request is Chinese
-4. Generate optional TTS audio and store it in `public/audio`
-5. Render through the generic composition, not through one-off scene files
-6. Save process notes in `docs` when the workflow changes
+3. Map the research into the typed fields in `src/types/matchup.ts`
+4. Localize copy if the request is Chinese
+5. Generate optional TTS audio and store it in `public/audio`
+6. Render through the generic composition, not through one-off scene files
+7. Update docs only when the reusable workflow changes
 
 The default assumption is that AI collects the information.
 Do not wait for the user to manually assemble research unless the request explicitly says otherwise.
 
+## Preferred source order
+
+1. `nba.com` official previews, recaps, roster pages, player pages, and playoff series pages
+2. Official NBA injury report PDFs
+3. Team game notes PDFs
+4. Public X posts for buzz, narrative temperature, and recency color
+
+## Source handling rules
+
+- Do not use X alone for injuries, lineup certainty, schedule details, standings, or seeding
+- Keep short source labels on cards and scene notes
+- Keep raw source links in the matchup data file for auditability
+- Refresh time-sensitive playoff data before each render
+
 ## Current reusable system
 
-- Data model:
-  - `src/types/matchup.ts`
-- Team themes:
-  - `src/themes/teams.ts`
-- Main template:
-  - `src/templates/MatchupPreviewTemplate.tsx`
-- Scene modules:
-  - `src/templates/matchup/*`
-- Example wrapper:
-  - `src/CelticsSixersPreview.tsx`
+- Typed contract: `src/types/matchup.ts`
+- Matchup data: `src/data/matchups/*`
+- Team themes: `src/themes/teams.ts`
+- Main template: `src/templates/MatchupPreviewTemplate.tsx`
+- Scene modules: `src/templates/matchup/*`
+- Example wrapper: `src/CelticsSixersPreview.tsx`
 
-## Chinese localized preview rules
+## Data expectations
+
+At minimum, each matchup package should keep:
+
+- `schedule`
+- `teams`
+- `pulse`
+- `playerCards`
+- `matchupEdges`
+- `sources`
+- `closingNote`
+
+Use the richer optional fields when the material is real and worth rendering:
+
+- `narrativeThreads`
+- `headToHead`
+- `recentForm`
+- `styleProfiles`
+- `tacticalKeys`
+- `tacticalBoard`
+- `playoffPanorama`
+- `voiceover`
+
+## Chinese localization rules
 
 - Use `Noto Sans SC` for Chinese display and body copy
 - Keep player names, matchup edges, and social summaries readable first
 - Do not force English uppercase styling onto Chinese text
-- If progress UI is used, each scene should have its own bar and the current indicator should be obvious
+- Prefer short, spoken sentences over dense translationese
 
-## TTS rules
+## TTS workflow
 
-- Preferred local tool: `edge-tts`
-- Preferred voice right now: `zh-CN-YunyangNeural`
-- Store generated files under `public/audio`
+- Preferred tool: `edge-tts`
+- Preferred voice: `zh-CN-YunyangNeural`
+- Output folder: `public/audio`
 - Keep the narration script in the matchup data file
 - Duck background music when voiceover exists
+
+Recommended structure:
+
+```ts
+voiceover?: {
+  script: string;
+  audioSrc: string;
+  voice: string;
+}
+```
+
+Recommended narration style:
+
+- one thesis per sentence
+- no invented details
+- mention injuries only when they materially affect the matchup
+- make total runtime match the actual audio duration
 
 ## Local commands
 
@@ -74,43 +125,20 @@ Generate TTS from a text file:
 scripts/generate-edge-tts.sh public/audio/sample.mp3 docs/sample-tts.txt zh-CN-YunyangNeural
 ```
 
-## When extending the repo
+## Extension rules
 
 - Add more matchup data files instead of cloning scene code
 - Add more teams to `src/themes/teams.ts`
-- Add more output modes as template variants, not bespoke compositions
-- Update this runbook whenever the workflow becomes more capable
+- Add template variants only when the mode is truly reusable
+- Fold stable workflow changes back into this file instead of creating a new process note
 
-## Richer content expectation
+## Editorial handoff
 
-Future previews should try to pull from more than one angle.
+For what the preview should actually say, follow `analysis-framework.md`.
 
-Preferred buckets:
+That file defines:
 
-- playoff panorama
-- player relationships
-- historical matchup context
-- recent form
-- style identity
-- tactical keys
-- tactical board
-- social temperature
-
-Reference:
-
-- `docs/rich-preview-framework.md`
-- `docs/analysis-framework.md`
-- `docs/tactical-board-layer.md`
-
-## Playoff panorama rule
-
-If the request is for a playoff matchup, AI should try to start with a bracket-level scene.
-
-That means collecting:
-
-- current East and West first-round tree
-- current series score or Game 1 status
-- which branch contains the focus matchup
-- one short headline for each conference
-
-This should be treated as time-sensitive information and refreshed from current sources before rendering.
+- the minimum quality bar
+- the required analysis buckets
+- playoff panorama expectations
+- tactical-board expectations
