@@ -68,6 +68,7 @@ Type-check:
 - `docs/overview.md`
 - `docs/ai-runbook.md`
 - `docs/analysis-framework.md`
+- `docs/celtics-sixers-social-preview-plan.md`
 - `docs/design-references.md`
 - `docs/production-handbook.md`
 - `docs/nba-video-analysis.md`
