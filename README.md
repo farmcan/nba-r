@@ -8,12 +8,11 @@ The repo is built around one repeatable path:
 2. store claims in typed local data
 3. render through the reusable template system
 
-The current example is `Celtics76ersPreviewExample`, backed by `src/data/matchups/celtics-sixers.ts` and rendered through `src/templates/MatchupPreviewTemplate.tsx`.
+The current example is `Celtics76ersPreviewExample`, backed by `src/data/matchups/celtics-sixers.ts` and rendered through the unified short-form preview pipeline.
 
 ## Compositions
 
-- `Celtics76ersPreviewExample`: data-driven playoff preview built on the generic matchup template
-- `Celtics76ersSocialPreview`: short-form version of the same matchup for social distribution
+- `Celtics76ersPreviewExample`: the single active Celtics vs 76ers preview composition
 - `NBAPlayoffPulse`: earlier style-study opener
 
 ## Commands
@@ -34,12 +33,6 @@ Render the current matchup preview:
 
 ```bash
 ./node_modules/.bin/remotion render src/index.ts Celtics76ersPreviewExample out/celtics-76ers-preview.mp4 --browser-executable="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --concurrency=1
-```
-
-Render the short-form social preview:
-
-```bash
-./node_modules/.bin/remotion render src/index.ts Celtics76ersSocialPreview out/celtics-76ers-social-preview.mp4 --browser-executable="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --concurrency=1
 ```
 
 Generate Chinese TTS locally:
