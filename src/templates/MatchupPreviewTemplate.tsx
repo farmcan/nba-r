@@ -1,11 +1,12 @@
 import React from "react";
-import {Audio, AbsoluteFill, staticFile} from "remotion";
+import {AbsoluteFill} from "remotion";
 import {springTiming, TransitionSeries} from "@remotion/transitions";
 import {fade} from "@remotion/transitions/fade";
 import {slide} from "@remotion/transitions/slide";
 import {wipe} from "@remotion/transitions/wipe";
 import {TeamTheme} from "../themes/teams";
 import {MatchupPreviewData} from "../types/matchup";
+import {MatchupAudioBed} from "./MatchupAudioBed";
 import {ClosingScene} from "./matchup/ClosingScene";
 import {DeepAnalysisScene} from "./matchup/DeepAnalysisScene";
 import {IntroHero} from "./matchup/IntroHero";
@@ -35,14 +36,9 @@ export const MatchupPreviewTemplate: React.FC<MatchupPreviewTemplateProps> = ({
   homeTheme,
   awayTheme,
 }) => {
-  const hasVoiceover = Boolean(data.voiceover?.audioSrc);
-
   return (
     <AbsoluteFill style={{backgroundColor: neutral.ink}}>
-      <Audio src={staticFile("audio/pulse.mp3")} volume={() => hasVoiceover ? 0.18 : 0.52} loop />
-      {hasVoiceover ? (
-        <Audio src={staticFile(data.voiceover!.audioSrc)} volume={1} />
-      ) : null}
+      <MatchupAudioBed data={data} musicVolumeWithVoiceover={0.18} musicVolumeWithoutVoiceover={0.52} />
       <TransitionSeries>
         <TransitionSeries.Sequence durationInFrames={205} name="Playoff Panorama">
           <PlayoffPanoramaScene

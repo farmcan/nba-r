@@ -1,10 +1,11 @@
 import React from "react";
-import {Audio, AbsoluteFill, staticFile} from "remotion";
+import {AbsoluteFill} from "remotion";
 import {springTiming, TransitionSeries} from "@remotion/transitions";
 import {fade} from "@remotion/transitions/fade";
 import {slide} from "@remotion/transitions/slide";
 import {TeamTheme} from "../themes/teams";
 import {MatchupPreviewData} from "../types/matchup";
+import {MatchupAudioBed} from "./MatchupAudioBed";
 import {
   SocialClosingScene,
   SocialEdgesScene,
@@ -31,18 +32,9 @@ const transitionTiming = springTiming({
 export const MatchupSocialPreviewTemplate: React.FC<
   MatchupSocialPreviewTemplateProps
 > = ({data, homeTheme, awayTheme}) => {
-  const hasVoiceover = Boolean(data.voiceover?.audioSrc);
-
   return (
     <AbsoluteFill style={{backgroundColor: neutral.ink}}>
-      <Audio
-        src={staticFile("audio/pulse.mp3")}
-        volume={() => (hasVoiceover ? 0.16 : 0.48)}
-        loop
-      />
-      {hasVoiceover ? (
-        <Audio src={staticFile(data.voiceover!.audioSrc)} volume={1} />
-      ) : null}
+      <MatchupAudioBed data={data} musicVolumeWithVoiceover={0.16} musicVolumeWithoutVoiceover={0.48} />
       <TransitionSeries>
         <TransitionSeries.Sequence durationInFrames={150} name="Hook">
           <SocialHookScene
