@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Workflow DAG</title>
+    <style>
+      :root {
+        --bg: #07111b;
+        --panel: rgba(5, 12, 20, 0.88);
+        --panel-2: rgba(9, 18, 28, 0.94);
+        --line: rgba(255, 255, 255, 0.1);
+        --text: #f4efe6;
+        --muted: rgba(244, 239, 230, 0.62);
+        --green: #00a85a;
+        --red: #ef4f5f;
+        --gold: #f4b63d;
+        --blue: #2d7ff9;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: "Noto Sans SC", "Inter", sans-serif;
+        background:
+          radial-gradient(circle at 15% 18%, rgba(0, 122, 51, 0.22), transparent 28%),
+          radial-gradient(circle at 84% 18%, rgba(237, 23, 76, 0.18), transparent 28%),
+          linear-gradient(135deg, #040b13 0%, #0a1622 48%, #07111b 100%);
+        color: var(--text);
+      }
+
+      .shell {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        height: 100vh;
+      }
+
+      .canvas-shell {
+        position: relative;
+        overflow: hidden;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+        background-size: 120px 120px;
+      }
+
+      .toolbar {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        z-index: 20;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        background: rgba(7, 17, 27, 0.8);
+        backdrop-filter: blur(12px);
+      }
+
+      .toolbar button {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        padding: 8px 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .toolbar .meta {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .legend {
+        position: absolute;
+        right: 18px;
+        top: 18px;
+        z-index: 20;
+        display: flex;
+        gap: 12px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        background: rgba(7, 17, 27, 0.8);
+        backdrop-filter: blur(12px);
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+      }
+
+      .viewport {
+        position: absolute;
+        inset: 0;
+        cursor: grab;
+        padding: 18px 18px 18px 12px;
+      }
+
+      .viewport.dragging {
+        cursor: grabbing;
+      }
+
+      .world {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 2200px;
+        height: 1200px;
+        transform-origin: 0 0;
+      }
+
+      svg.edges {
+        position: absolute;
+        inset: 0;
+        overflow: visible;
+      }
+
+      .node {
+        position: absolute;
+        width: 250px;
+        min-height: 126px;
+        padding: 18px 18px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--panel);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+        cursor: pointer;
+        transition: transform 120ms ease, border-color 120ms ease;
+      }
+
+      .node:hover,
+      .node.active {
+        transform: translateY(-4px);
+        border-color: rgba(255, 255, 255, 0.22);
+      }
+
+      .node::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 6px;
+      }
+
+      .node[data-status="done"]::before,
+      .node[data-status="fixed"]::before {
+        background: linear-gradient(180deg, var(--green), rgba(0, 168, 90, 0.25));
+      }
+
+      .node[data-status="warning"]::before {
+        background: linear-gradient(180deg, var(--gold), rgba(244, 182, 61, 0.25));
+      }
+
+      .node[data-type="incident"] {
+        background:
+          linear-gradient(180deg, rgba(239, 79, 95, 0.08), transparent),
+          rgba(18, 10, 14, 0.92);
+      }
+
+      .node[data-type="output"] {
+        background:
+          linear-gradient(180deg, rgba(45, 127, 249, 0.08), transparent),
+          rgba(5, 12, 20, 0.92);
+      }
+
+      .eyebrow {
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 1.1px;
+        text-transform: uppercase;
+        font-weight: 800;
+      }
+
+      .title {
+        margin-top: 10px;
+        font-size: 28px;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .subtitle {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.2;
+      }
+
+      .status-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 14px;
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--text);
+      }
+
+      .status-pill {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+      }
+
+      .sidebar {
+        border-left: 1px solid var(--line);
+        background: var(--panel-2);
+        padding: 24px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .sidebar h1 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1;
+      }
+
+      .sidebar .lede {
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.35;
+      }
+
+      .card {
+        padding: 18px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .card h2 {
+        margin: 0 0 12px;
+        font-size: 16px;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .drawer-title {
+        font-size: 24px;
+        font-weight: 900;
+        line-height: 1.05;
+      }
+
+      .drawer-subtitle {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.3;
+      }
+
+      .drawer-detail {
+        margin-top: 14px;
+        color: var(--text);
+        font-size: 15px;
+        line-height: 1.45;
+      }
+
+      .kbd {
+        display: inline-block;
+        padding: 2px 6px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 12px;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="canvas-shell" id="canvas-shell">
+        <div class="toolbar">
+          <button id="fit-btn">Fit View</button>
+          <button id="reset-btn">Reset</button>
+          <div class="meta">拖动画布平移，滚轮缩放，点击节点看细节</div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-dot" style="background: var(--green)"></span>完成</div>
+          <div class="legend-item"><span class="legend-dot" style="background: var(--gold)"></span>告警</div>
+          <div class="legend-item"><span class="legend-dot" style="background: var(--red)"></span>事故节点</div>
+          <div class="legend-item"><span class="legend-dot" style="background: var(--blue)"></span>输出</div>
+        </div>
+        <div class="viewport" id="viewport">
+          <div class="world" id="world">
+            <svg class="edges" id="edges"></svg>
+            <div id="nodes"></div>
+          </div>
+        </div>
+      </div>
+      <aside class="sidebar">
+        <div>
+          <div class="eyebrow">workflow graph</div>
+          <h1>Agent Video DAG</h1>
+          <div class="lede">
+            这张图把需求、研究、模板、渲染、评测、错误修复和发布收成一条可追踪的 DAG，
+            方便后续 agent 快速定位“当前在哪一步”和“曾经踩过哪些坑”。
+          </div>
+        </div>
+        <div class="card">
+          <h2>交互提示</h2>
+          <p>
+            <span class="kbd">拖拽</span> 平移画布，
+            <span class="kbd">滚轮</span> 缩放，
+            <span class="kbd">Fit View</span> 自动归位。
+          </p>
+        </div>
+        <div class="card" id="drawer">
+          <div class="drawer-title">选择一个节点</div>
+          <div class="drawer-subtitle">右侧面板会显示当前流程节点、错误节点或产出节点的详细说明。</div>
+          <div class="drawer-detail">
+            建议先从“用户需求”开始，顺着主链看，再看下方的错误节点和修复回流边。
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <script src="../shared/agent-workflow-data.js"></script>
+    <script>
+      const data = window.agentWorkflowData.dag;
+      const shell = document.getElementById("canvas-shell");
+      const viewport = document.getElementById("viewport");
+      const world = document.getElementById("world");
+      const edges = document.getElementById("edges");
+      const nodesRoot = document.getElementById("nodes");
+      const drawer = document.getElementById("drawer");
+      const fitBtn = document.getElementById("fit-btn");
+      const resetBtn = document.getElementById("reset-btn");
+
+      let state = {...data.viewport};
+      let isDragging = false;
+      let dragStart = {x: 0, y: 0, originX: 0, originY: 0};
+      let activeNodeId = null;
+
+      const statusLabel = {
+        done: "Completed",
+        fixed: "Fixed",
+        warning: "Warning",
+        pending: "Pending",
+      };
+
+      const statusColor = {
+        done: "var(--green)",
+        fixed: "var(--green)",
+        warning: "var(--gold)",
+        pending: "var(--blue)",
+      };
+
+      function renderNodes() {
+        nodesRoot.innerHTML = "";
+        for (const node of data.nodes) {
+          const el = document.createElement("button");
+          el.className = "node";
+          el.type = "button";
+          el.dataset.type = node.type;
+          el.dataset.status = node.status;
+          if (node.id === activeNodeId) el.classList.add("active");
+          el.style.left = `${node.x}px`;
+          el.style.top = `${node.y}px`;
+          el.innerHTML = `
+            <div class="eyebrow">${node.type}</div>
+            <div class="title">${node.title}</div>
+            <div class="subtitle">${node.subtitle}</div>
+            <div class="status-tag">
+              <span class="status-pill" style="background:${statusColor[node.status] || "var(--blue)"}"></span>
+              ${statusLabel[node.status] || node.status}
+            </div>
+          `;
+          el.addEventListener("click", (event) => {
+            event.stopPropagation();
+            activeNodeId = node.id;
+            updateDrawer(node);
+            renderNodes();
+          });
+          nodesRoot.appendChild(el);
+        }
+      }
+
+      function renderEdges() {
+        edges.setAttribute("width", "2200");
+        edges.setAttribute("height", "1200");
+        edges.innerHTML = `
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="rgba(244,239,230,0.5)"></path>
+            </marker>
+          </defs>
+        `;
+        for (const edge of data.edges) {
+          const from = data.nodes.find((node) => node.id === edge.from);
+          const to = data.nodes.find((node) => node.id === edge.to);
+          if (!from || !to) continue;
+          const startX = from.x + 250;
+          const startY = from.y + 63;
+          const endX = to.x;
+          const endY = to.y + 63;
+          const dx = Math.max(80, Math.abs(endX - startX) * 0.45);
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute(
+            "d",
+            `M ${startX} ${startY} C ${startX + dx} ${startY}, ${endX - dx} ${endY}, ${endX} ${endY}`
+          );
+          path.setAttribute("fill", "none");
+          path.setAttribute("stroke", "rgba(244,239,230,0.28)");
+          path.setAttribute("stroke-width", "3");
+          path.setAttribute("marker-end", "url(#arrow)");
+          edges.appendChild(path);
+
+          const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          label.setAttribute("x", String((startX + endX) / 2));
+          label.setAttribute("y", String((startY + endY) / 2 - 10));
+          label.setAttribute("fill", "rgba(244,239,230,0.64)");
+          label.setAttribute("font-size", "12");
+          label.setAttribute("font-weight", "700");
+          label.setAttribute("text-anchor", "middle");
+          label.textContent = edge.label;
+          edges.appendChild(label);
+        }
+      }
+
+      function updateDrawer(node) {
+        drawer.innerHTML = `
+          <div class="eyebrow">${node.type} / ${statusLabel[node.status] || node.status}</div>
+          <div class="drawer-title">${node.title}</div>
+          <div class="drawer-subtitle">${node.subtitle}</div>
+          <div class="drawer-detail">${node.details}</div>
+        `;
+      }
+
+      function applyTransform() {
+        world.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+      }
+
+      function fitView() {
+        const shellRect = shell.getBoundingClientRect();
+        const paddingX = 150;
+        const paddingY = 96;
+        const bounds = {
+          minX: Math.min(...data.nodes.map((node) => node.x)),
+          minY: Math.min(...data.nodes.map((node) => node.y)),
+          maxX: Math.max(...data.nodes.map((node) => node.x + 250)),
+          maxY: Math.max(...data.nodes.map((node) => node.y + 126)),
+        };
+        const worldWidth = bounds.maxX - bounds.minX;
+        const worldHeight = bounds.maxY - bounds.minY;
+        const scaleX = (shellRect.width - paddingX * 2) / worldWidth;
+        const scaleY = (shellRect.height - paddingY * 2) / worldHeight;
+        state.scale = Math.max(0.5, Math.min(1.05, Math.min(scaleX, scaleY)));
+        state.x = paddingX - bounds.minX * state.scale;
+        state.y = paddingY - bounds.minY * state.scale;
+        applyTransform();
+      }
+
+      viewport.addEventListener("pointerdown", (event) => {
+        isDragging = true;
+        viewport.classList.add("dragging");
+        dragStart = {
+          x: event.clientX,
+          y: event.clientY,
+          originX: state.x,
+          originY: state.y,
+        };
+      });
+
+      window.addEventListener("pointermove", (event) => {
+        if (!isDragging) return;
+        state.x = dragStart.originX + event.clientX - dragStart.x;
+        state.y = dragStart.originY + event.clientY - dragStart.y;
+        applyTransform();
+      });
+
+      window.addEventListener("pointerup", () => {
+        isDragging = false;
+        viewport.classList.remove("dragging");
+      });
+
+      viewport.addEventListener(
+        "wheel",
+        (event) => {
+          event.preventDefault();
+          const rect = viewport.getBoundingClientRect();
+          const mouseX = event.clientX - rect.left;
+          const mouseY = event.clientY - rect.top;
+          const worldX = (mouseX - state.x) / state.scale;
+          const worldY = (mouseY - state.y) / state.scale;
+          const nextScale = Math.min(1.8, Math.max(0.45, state.scale * (event.deltaY > 0 ? 0.92 : 1.08)));
+          state.x = mouseX - worldX * nextScale;
+          state.y = mouseY - worldY * nextScale;
+          state.scale = nextScale;
+          applyTransform();
+        },
+        {passive: false}
+      );
+
+      fitBtn.addEventListener("click", fitView);
+      resetBtn.addEventListener("click", () => {
+        state = {...data.viewport};
+        applyTransform();
+      });
+
+      viewport.addEventListener("click", () => {
+        activeNodeId = null;
+        renderNodes();
+        drawer.innerHTML = `
+          <div class="drawer-title">选择一个节点</div>
+          <div class="drawer-subtitle">右侧面板会显示当前流程节点、错误节点或产出节点的详细说明。</div>
+          <div class="drawer-detail">建议先从“用户需求”开始，顺着主链看，再看下方的错误节点和修复回流边。</div>
+        `;
+      });
+
+      renderEdges();
+      renderNodes();
+      fitView();
+    </script>
+  </body>
+</html>

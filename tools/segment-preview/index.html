@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Segment Preview</title>
+    <style>
+      :root {
+        --bg: #07111b;
+        --panel: rgba(5, 12, 20, 0.9);
+        --line: rgba(255, 255, 255, 0.1);
+        --text: #f4efe6;
+        --muted: rgba(244, 239, 230, 0.64);
+        --green: #00a85a;
+        --red: #ef4f5f;
+        --blue: #2d7ff9;
+        --gold: #f4b63d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Noto Sans SC", "Inter", sans-serif;
+        background:
+          radial-gradient(circle at 14% 18%, rgba(0, 122, 51, 0.22), transparent 26%),
+          radial-gradient(circle at 84% 20%, rgba(237, 23, 76, 0.18), transparent 26%),
+          linear-gradient(135deg, #040b13 0%, #0a1622 48%, #07111b 100%);
+        color: var(--text);
+      }
+
+      .page {
+        padding: 24px;
+        display: grid;
+        gap: 18px;
+      }
+
+      .hero,
+      .panel {
+        border: 1px solid var(--line);
+        background: var(--panel);
+      }
+
+      .hero {
+        padding: 22px 24px;
+      }
+
+      .hero h1 {
+        margin: 6px 0 0;
+        font-size: 38px;
+        line-height: 1;
+      }
+
+      .eyebrow {
+        color: #8fc2ff;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .hero p {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.45;
+        max-width: 960px;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) minmax(360px, 0.8fr);
+        gap: 18px;
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .media-stack {
+        display: grid;
+        gap: 16px;
+      }
+
+      video,
+      audio {
+        width: 100%;
+      }
+
+      .media-title {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 1.4px;
+        margin-bottom: 10px;
+      }
+
+      .timeline {
+        margin-top: 14px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .timeline-track {
+        position: relative;
+        height: 18px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+        overflow: hidden;
+      }
+
+      .timeline-segment {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        border-right: 1px solid rgba(7, 17, 27, 0.7);
+        cursor: pointer;
+        opacity: 0.92;
+      }
+
+      .timeline-head {
+        position: absolute;
+        top: -5px;
+        width: 3px;
+        height: 28px;
+        background: #fff;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      button {
+        padding: 10px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      button.active {
+        background: rgba(45, 127, 249, 0.18);
+        border-color: rgba(45, 127, 249, 0.5);
+      }
+
+      .status {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .stat {
+        padding: 12px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .stat-label {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .stat-value {
+        margin-top: 8px;
+        font-size: 24px;
+        font-weight: 900;
+      }
+
+      .segment-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .segment-item {
+        padding: 14px 14px 12px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+        cursor: pointer;
+      }
+
+      .segment-item.active {
+        border-color: rgba(45, 127, 249, 0.55);
+        background: rgba(45, 127, 249, 0.12);
+      }
+
+      .segment-title {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 17px;
+        font-weight: 900;
+      }
+
+      .segment-time {
+        color: var(--gold);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        white-space: nowrap;
+      }
+
+      .segment-note {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.35;
+      }
+
+      .source-switch {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      @media (max-width: 1100px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <section class="hero">
+        <div class="eyebrow">review tool</div>
+        <h1>Segment Preview</h1>
+        <p>
+          这个页面把统一版视频和中文配音拆成命名片段，方便快速检查 hook、球星段、胜负手和结尾。
+          点击任一片段会直接跳转；开启 loop 后可以反复打磨单段节奏。
+        </p>
+      </section>
+
+      <section class="layout">
+        <div class="panel">
+          <div class="media-stack">
+            <div>
+              <div class="media-title">Preview Video</div>
+              <video id="video" controls preload="metadata"></video>
+            </div>
+            <div>
+              <div class="media-title">Source Audio</div>
+              <audio id="audio" controls preload="metadata"></audio>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <div class="media-title">Video Timeline</div>
+            <div class="timeline-track" id="video-track"></div>
+            <div class="media-title">Audio Timeline</div>
+            <div class="timeline-track" id="audio-track"></div>
+          </div>
+
+          <div class="controls">
+            <button id="prev-btn">Previous Segment</button>
+            <button id="next-btn">Next Segment</button>
+            <button id="play-segment-btn">Play Segment</button>
+            <button id="loop-btn">Loop Current Segment</button>
+            <button id="sync-btn">Sync Audio To Video</button>
+          </div>
+
+          <div class="status">
+            <div class="stat">
+              <div class="stat-label">Current Segment</div>
+              <div class="stat-value" id="current-segment">Hook</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Playhead</div>
+              <div class="stat-value" id="playhead">00:00.00</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Loop</div>
+              <div class="stat-value" id="loop-state">Off</div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <div class="source-switch">
+            <button id="video-list-btn" class="active">Video Segments</button>
+            <button id="audio-list-btn">Audio Segments</button>
+          </div>
+          <div class="segment-list" id="segment-list"></div>
+        </aside>
+      </section>
+    </div>
+
+    <script src="../shared/agent-workflow-data.js"></script>
+    <script>
+      const data = window.agentWorkflowData;
+      const video = document.getElementById("video");
+      const audio = document.getElementById("audio");
+      const videoTrack = document.getElementById("video-track");
+      const audioTrack = document.getElementById("audio-track");
+      const segmentList = document.getElementById("segment-list");
+      const currentSegmentEl = document.getElementById("current-segment");
+      const playheadEl = document.getElementById("playhead");
+      const loopStateEl = document.getElementById("loop-state");
+      const loopBtn = document.getElementById("loop-btn");
+      const prevBtn = document.getElementById("prev-btn");
+      const nextBtn = document.getElementById("next-btn");
+      const playSegmentBtn = document.getElementById("play-segment-btn");
+      const syncBtn = document.getElementById("sync-btn");
+      const videoListBtn = document.getElementById("video-list-btn");
+      const audioListBtn = document.getElementById("audio-list-btn");
+
+      video.src = data.media.previewVideo;
+      audio.src = data.media.previewAudio;
+
+      let activeSource = "video";
+      let activeSegmentIndex = 0;
+      let loopEnabled = false;
+
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        const centis = Math.floor((seconds - Math.floor(seconds)) * 100);
+        return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}.${String(centis).padStart(2, "0")}`;
+      }
+
+      function getSegments() {
+        return data.segments[activeSource];
+      }
+
+      function getActiveSegment() {
+        return getSegments()[activeSegmentIndex];
+      }
+
+      function renderTimeline(trackEl, segments, duration, colorA, colorB, currentTime) {
+        trackEl.innerHTML = "";
+        const safeDuration = duration || segments[segments.length - 1].end;
+        segments.forEach((segment, index) => {
+          const node = document.createElement("div");
+          node.className = "timeline-segment";
+          node.style.left = `${(segment.start / safeDuration) * 100}%`;
+          node.style.width = `${((segment.end - segment.start) / safeDuration) * 100}%`;
+          node.style.background =
+            index % 2 === 0
+              ? `linear-gradient(90deg, ${colorA}, rgba(255,255,255,0.08))`
+              : `linear-gradient(90deg, ${colorB}, rgba(255,255,255,0.08))`;
+          node.title = `${segment.title} · ${formatTime(segment.start)} - ${formatTime(segment.end)}`;
+          node.addEventListener("click", () => jumpToSegment(index));
+          trackEl.appendChild(node);
+        });
+
+        const head = document.createElement("div");
+        head.className = "timeline-head";
+        head.style.left = `${(currentTime / safeDuration) * 100}%`;
+        trackEl.appendChild(head);
+      }
+
+      function renderList() {
+        const segments = getSegments();
+        segmentList.innerHTML = "";
+        segments.forEach((segment, index) => {
+          const item = document.createElement("button");
+          item.className = "segment-item";
+          item.type = "button";
+          if (index === activeSegmentIndex) item.classList.add("active");
+          item.innerHTML = `
+            <div class="segment-title">
+              <span>${segment.title}</span>
+              <span class="segment-time">${formatTime(segment.start)} - ${formatTime(segment.end)}</span>
+            </div>
+            <div class="segment-note">${segment.note}</div>
+          `;
+          item.addEventListener("click", () => jumpToSegment(index));
+          segmentList.appendChild(item);
+        });
+
+        const active = getActiveSegment();
+        currentSegmentEl.textContent = active ? active.title : "-";
+        loopStateEl.textContent = loopEnabled ? "On" : "Off";
+        loopBtn.classList.toggle("active", loopEnabled);
+      }
+
+      function renderTracks() {
+        renderTimeline(videoTrack, data.segments.video, video.duration, "rgba(0,168,90,0.88)", "rgba(45,127,249,0.88)", video.currentTime || 0);
+        renderTimeline(audioTrack, data.segments.audio, audio.duration, "rgba(244,182,61,0.88)", "rgba(239,79,95,0.88)", audio.currentTime || 0);
+      }
+
+      function jumpToSegment(index) {
+        activeSegmentIndex = index;
+        const segment = getActiveSegment();
+        video.currentTime = segment.start;
+        audio.currentTime = segment.start;
+        renderList();
+        renderTracks();
+      }
+
+      function syncAudioToVideo() {
+        audio.currentTime = video.currentTime;
+      }
+
+      function updatePlayhead() {
+        playheadEl.textContent = formatTime(video.currentTime || 0);
+        renderTracks();
+      }
+
+      function checkLoop() {
+        if (!loopEnabled) return;
+        const segment = getActiveSegment();
+        if (!segment) return;
+        if (video.currentTime >= segment.end) {
+          video.currentTime = segment.start;
+          video.play();
+        }
+        if (audio.currentTime >= segment.end) {
+          audio.currentTime = segment.start;
+          audio.play();
+        }
+      }
+
+      function switchSource(source) {
+        activeSource = source;
+        activeSegmentIndex = 0;
+        videoListBtn.classList.toggle("active", source === "video");
+        audioListBtn.classList.toggle("active", source === "audio");
+        renderList();
+      }
+
+      prevBtn.addEventListener("click", () => {
+        activeSegmentIndex = Math.max(0, activeSegmentIndex - 1);
+        jumpToSegment(activeSegmentIndex);
+      });
+
+      nextBtn.addEventListener("click", () => {
+        activeSegmentIndex = Math.min(getSegments().length - 1, activeSegmentIndex + 1);
+        jumpToSegment(activeSegmentIndex);
+      });
+
+      playSegmentBtn.addEventListener("click", () => {
+        const segment = getActiveSegment();
+        video.currentTime = segment.start;
+        audio.currentTime = segment.start;
+        video.play();
+        audio.play();
+      });
+
+      loopBtn.addEventListener("click", () => {
+        loopEnabled = !loopEnabled;
+        renderList();
+      });
+
+      syncBtn.addEventListener("click", syncAudioToVideo);
+      videoListBtn.addEventListener("click", () => switchSource("video"));
+      audioListBtn.addEventListener("click", () => switchSource("audio"));
+
+      video.addEventListener("timeupdate", updatePlayhead);
+      audio.addEventListener("timeupdate", renderTracks);
+      video.addEventListener("timeupdate", checkLoop);
+      audio.addEventListener("timeupdate", checkLoop);
+      video.addEventListener("loadedmetadata", renderTracks);
+      audio.addEventListener("loadedmetadata", renderTracks);
+
+      renderList();
+      renderTracks();
+    </script>
+  </body>
+</html>

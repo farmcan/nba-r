@@ -53,6 +53,7 @@ Type-check:
 - `src/templates`: generic render templates
 - `src/themes`: reusable team-level visual definitions
 - `src/CelticsSixersPreview.tsx`: thin example wrapper around the generic matchup template
+- `tools`: standalone review utilities for workflow and segmented media inspection
 - `public/assets`: logos, player images, and other local media
 - `docs`: reusable workflow and sourcing notes for future requests
 
@@ -66,3 +67,11 @@ Type-check:
 - `docs/production-handbook.md`
 - `docs/user-persona.md`
 - `docs/nba-video-analysis.md`
+- `docs/web-tools-plan.md`
+- `docs/web-tools-logic.md`
+
+## Review tools
+
+- `tools/index.html`: landing page for local review tools
+- `tools/dag/index.html`: infinite-canvas workflow DAG for request -> render -> review -> publish
+- `tools/segment-preview/index.html`: segmented video/audio review page for the unified preview output
