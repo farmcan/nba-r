@@ -68,7 +68,6 @@ const ComparisonBar: React.FC<{
           height: "100%",
           background: homeColor,
           borderRadius: "3px 0 0 3px",
-          transition: "width 0.3s",
         }} />
         <div style={{
           width: `${100 - homePct}%`,
@@ -150,7 +149,7 @@ export const DeepAnalysisScene: React.FC<{
             故事线 · NARRATIVES
           </div>
           <div style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14}}>
-            {narratives.slice(0, 3).map((thread: NarrativeThread, index) => {
+            {narratives.slice(0, 3).map((thread: NarrativeThread) => {
               const theme = resolveTheme(thread.teamId, homeTheme, awayTheme) ?? homeTheme;
               return (
                 <div

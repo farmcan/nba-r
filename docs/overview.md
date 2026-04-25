@@ -10,7 +10,7 @@ This folder was trimmed down to keep only documents that still describe the curr
 
 ## Supporting references
 
-- `design-references.md`: external packaging references and visual-system takeaways
+- `design-references.md`: current-project review plus external packaging, web UI, and trading-card references for the next visual-system upgrade
 - `nba-video-analysis.md`: Chinese long-form notes on high-performing NBA video patterns
 
 ## Current system in one page

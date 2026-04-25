@@ -8,7 +8,6 @@ import {
   CourtLines,
   FloatingOrbs,
   SceneProgress,
-  SlashDivider,
   VignetteOverlay,
   getSceneTint,
   neutral,
@@ -26,178 +25,329 @@ export const ClosingScene: React.FC<{
   const reveal = spring({
     fps,
     frame,
-    config: {damping: 15, stiffness: 125, mass: 0.9},
+    config: {damping: 16, stiffness: 120, mass: 0.88},
   });
-  const spread = interpolate(reveal, [0, 1], [120, 0]);
-
-  const promptOpacity = interpolate(frame, [30, 55], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
+  const promptReveal = spring({
+    fps,
+    frame: Math.max(0, frame - 24),
+    config: {damping: 17, stiffness: 110, mass: 0.94},
   });
-  const promptY = interpolate(frame, [25, 50], [20, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-
-  const totalSeeds = data.teams.home.seed + data.teams.away.seed;
-  const homePct = (data.teams.away.seed / totalSeeds) * 100;
-  const barWidth = interpolate(frame, [10, 45], [0, 1], {
-    extrapolateLeft: "clamp",
+  const scan = interpolate(frame, [0, 80], [-180, 1450], {
     extrapolateRight: "clamp",
   });
 
   return (
     <AbsoluteFill
       style={sceneBackground(
-        getSceneTint(homeTheme, 0.16),
-        getSceneTint(awayTheme, 0.12),
+        getSceneTint(homeTheme, 0.18),
+        getSceneTint(awayTheme, 0.14),
       )}
     >
-      {/* Arena background */}
-      <CourtBg src="assets/court.jpg" opacity={0.1} />
-      <CourtLines color="rgba(255,255,255,0.03)" opacity={0.4} />
-      <FloatingOrbs colors={[homeTheme.colors.primary, awayTheme.colors.secondary, "#F4B63D", "#fff"]} count={4} opacity={0.1} />
-      <VignetteOverlay strength={0.6} />
+      <CourtBg src="assets/court.jpg" opacity={0.12} scale={1.06} />
+      <CourtLines color="rgba(255,255,255,0.024)" opacity={0.34} />
+      <FloatingOrbs
+        colors={[homeTheme.colors.primary, awayTheme.colors.secondary, neutral.sky, "#fff"]}
+        count={4}
+        opacity={0.08}
+      />
+      <VignetteOverlay strength={0.66} />
 
-      <SlashDivider color={`${homeTheme.colors.primary}08`} width={2} angle={-20} />
-      <SlashDivider color={`${awayTheme.colors.secondary}06`} width={2} angle={20} />
+      <div
+        style={{
+          position: "absolute",
+          left: scan,
+          top: -120,
+          width: 180,
+          height: 1300,
+          background:
+            "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.14) 42%, rgba(255,255,255,0.04) 74%, transparent 100%)",
+          transform: "rotate(14deg)",
+          mixBlendMode: "screen",
+          pointerEvents: "none",
+        }}
+      />
 
-      <AbsoluteFill style={{justifyContent: "center", alignItems: "center", padding: "100px 140px"}}>
-        {/* Logos and title */}
+      <div
+        style={{
+          position: "absolute",
+          inset: "78px 78px 96px",
+          borderRadius: 38,
+          border: "1px solid rgba(255,255,255,0.08)",
+          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.02), 0 30px 90px rgba(0,0,0,0.22)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 14%, transparent 82%, rgba(255,255,255,0.05) 100%)",
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            left: -140,
+            top: 120,
+            width: 700,
+            height: 700,
+            borderRadius: 999,
+            background: `radial-gradient(circle, ${homeTheme.colors.primary}18 0%, transparent 68%)`,
+            filter: "blur(18px)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            right: -120,
+            bottom: 60,
+            width: 720,
+            height: 720,
+            borderRadius: 999,
+            background: `radial-gradient(circle, ${awayTheme.colors.secondary}16 0%, transparent 70%)`,
+            filter: "blur(20px)",
+          }}
+        />
+      </div>
+
+      <AbsoluteFill style={{padding: "118px 110px 122px", justifyContent: "space-between"}}>
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            gap: 36,
+            justifyContent: "space-between",
+            alignItems: "flex-start",
             opacity: reveal,
+            transform: `translateY(${interpolate(reveal, [0, 1], [26, 0])}px)`,
           }}
         >
-          <Img
-            src={staticFile(homeTheme.assets.logo)}
-            style={{width: 140, height: 140, transform: `translateX(${-spread}px)`}}
-          />
-          <div
-            style={{
-              color: neutral.cream,
-              fontFamily: '"Noto Sans SC", sans-serif',
-              fontWeight: 900,
-              fontSize: 100,
-              lineHeight: 0.96,
-              textAlign: "center",
-            }}
-          >
-            {data.schedule.game}
-            <br />
-            前瞻
-          </div>
-          <Img
-            src={staticFile(awayTheme.assets.logo)}
-            style={{width: 140, height: 140, transform: `translateX(${spread}px)`}}
-          />
-        </div>
-
-        {/* Schedule chips */}
-        <div
-          style={{
-            marginTop: 20,
-            display: "flex",
-            gap: 12,
-            opacity: reveal,
-          }}
-        >
-          {[data.schedule.date, data.schedule.tipoff, data.schedule.venue].map((chip) => (
+          <div>
+            <div style={{color: neutral.sky, fontSize: 18, fontWeight: 800, letterSpacing: 4}}>
+              FINAL TAKE
+            </div>
             <div
-              key={chip}
               style={{
-                padding: "8px 16px",
-                border: "1px solid rgba(255,255,255,0.12)",
-                background: "rgba(7,17,27,0.7)",
+                marginTop: 12,
                 color: neutral.cream,
-                fontSize: 18,
-                fontWeight: 700,
-                letterSpacing: 1,
-                borderRadius: 4,
+                fontFamily: '"Noto Sans SC", sans-serif',
+                fontWeight: 900,
+                fontSize: 94,
+                lineHeight: 0.94,
               }}
             >
-              {chip}
+              谁先钉死
+              <br />
+              自己的节奏
             </div>
-          ))}
-        </div>
-
-        {/* Seed comparison bar */}
-        <div
-          style={{
-            marginTop: 30,
-            width: 560,
-            opacity: barWidth,
-          }}
-        >
-          <div style={{display: "flex", justifyContent: "space-between", marginBottom: 6}}>
-            <span style={{color: homeTheme.colors.primary, fontSize: 15, fontWeight: 800}}>
-              {data.teams.home.name} #{data.teams.home.seed}
-            </span>
-            <span style={{color: awayTheme.colors.secondary, fontSize: 15, fontWeight: 800}}>
-              {data.teams.away.name} #{data.teams.away.seed}
-            </span>
           </div>
-          <div style={{
-            height: 6,
-            borderRadius: 3,
-            background: "rgba(255,255,255,0.06)",
-            overflow: "hidden",
-            display: "flex",
-          }}>
-            <div style={{
-              width: `${homePct}%`,
-              height: "100%",
-              background: homeTheme.colors.primary,
-              borderRadius: "3px 0 0 3px",
-            }} />
-            <div style={{
-              flex: 1,
-              height: "100%",
-              background: awayTheme.colors.secondary,
-              borderRadius: "0 3px 3px 0",
-            }} />
+          <div
+            style={{
+              width: 420,
+              padding: "18px 20px",
+              borderRadius: 24,
+              background: "rgba(7,17,27,0.64)",
+              border: "1px solid rgba(255,255,255,0.09)",
+              color: "rgba(244,239,230,0.74)",
+              fontSize: 18,
+              lineHeight: 1.18,
+            }}
+          >
+            这轮系列赛不会只靠名气决定，更像是完整度与爆点制造能力之间的持续拉扯。
           </div>
         </div>
 
-        {/* Interactive prompt */}
         <div
           style={{
-            marginTop: 34,
-            textAlign: "center",
-            opacity: promptOpacity,
-            transform: `translateY(${promptY}px)`,
+            display: "grid",
+            gridTemplateColumns: "1.12fr 0.88fr",
+            gap: 22,
+            alignItems: "stretch",
+            opacity: reveal,
           }}
         >
           <div
             style={{
-              color: neutral.cream,
-              fontFamily: '"Noto Sans SC", sans-serif',
-              fontWeight: 900,
-              fontSize: 48,
-              lineHeight: 1.1,
+              padding: "26px 28px",
+              borderRadius: 30,
+              background: "linear-gradient(160deg, rgba(7,17,27,0.82), rgba(14,24,36,0.96))",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 24px 70px rgba(0,0,0,0.18)",
             }}
           >
-            你觉得谁能赢？
+            <div style={{display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 20, alignItems: "center"}}>
+              {[
+                {theme: homeTheme, name: data.teams.home.name, seed: data.teams.home.seed},
+                {theme: awayTheme, name: data.teams.away.name, seed: data.teams.away.seed},
+              ].map((item, index) => (
+                <React.Fragment key={item.name}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 14,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 144,
+                        height: 144,
+                        borderRadius: 34,
+                        border: `1px solid ${item.theme.colors.primary}4a`,
+                        background: `radial-gradient(circle at 50% 34%, ${item.theme.colors.primary}26, rgba(255,255,255,0.03) 64%)`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Img
+                        src={staticFile(item.theme.assets.logo)}
+                        style={{width: 92, height: 92, objectFit: "contain"}}
+                      />
+                    </div>
+                    <div style={{color: neutral.cream, fontSize: 34, fontWeight: 900}}>{item.name}</div>
+                    <div
+                      style={{
+                        padding: "8px 14px",
+                        borderRadius: 999,
+                        background: index === 0 ? `${homeTheme.colors.primary}20` : `${awayTheme.colors.secondary}20`,
+                        color: neutral.cream,
+                        fontSize: 14,
+                        fontWeight: 800,
+                        letterSpacing: 1.2,
+                      }}
+                    >
+                      #{item.seed} SEED
+                    </div>
+                  </div>
+                  {index === 0 ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 10,
+                      }}
+                    >
+                      <div style={{color: "rgba(244,239,230,0.46)", fontSize: 54, fontWeight: 900}}>VS</div>
+                      <div style={{color: neutral.sky, fontSize: 14, fontWeight: 800, letterSpacing: 2}}>
+                        {data.schedule.game}
+                      </div>
+                    </div>
+                  ) : null}
+                </React.Fragment>
+              ))}
+            </div>
+
+            <div
+              style={{
+                marginTop: 26,
+                padding: "20px 22px",
+                borderRadius: 24,
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+              }}
+            >
+              <div style={{color: "rgba(244,239,230,0.46)", fontSize: 12, fontWeight: 800, letterSpacing: 1.6}}>
+                SCHEDULE
+              </div>
+              <div style={{marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap"}}>
+                {[data.schedule.date, data.schedule.tipoff, data.schedule.venue].map((chip) => (
+                  <div
+                    key={chip}
+                    style={{
+                      padding: "10px 14px",
+                      borderRadius: 14,
+                      border: "1px solid rgba(255,255,255,0.09)",
+                      background: "rgba(7,17,27,0.72)",
+                      color: neutral.cream,
+                      fontSize: 18,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {chip}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+
           <div
             style={{
-              marginTop: 10,
-              color: "rgba(244,239,230,0.55)",
-              fontSize: 22,
-              fontWeight: 600,
+              display: "grid",
+              gap: 18,
+              transform: `translateY(${interpolate(promptReveal, [0, 1], [28, 0])}px)`,
+              opacity: promptReveal,
             }}
           >
-            评论区留下你的预测
+            <div
+              style={{
+                padding: "24px 24px 22px",
+                borderRadius: 28,
+                background: "linear-gradient(160deg, rgba(7,17,27,0.82), rgba(14,24,36,0.96))",
+                border: "1px solid rgba(255,255,255,0.08)",
+              }}
+            >
+              <div style={{color: "rgba(244,239,230,0.46)", fontSize: 12, fontWeight: 800, letterSpacing: 1.6}}>
+                QUESTION
+              </div>
+              <div
+                style={{
+                  marginTop: 14,
+                  color: neutral.cream,
+                  fontFamily: '"Noto Sans SC", sans-serif',
+                  fontWeight: 900,
+                  fontSize: 58,
+                  lineHeight: 1,
+                }}
+              >
+                你觉得
+                <br />
+                谁能赢？
+              </div>
+              <div
+                style={{
+                  marginTop: 14,
+                  color: "rgba(244,239,230,0.72)",
+                  fontSize: 22,
+                  lineHeight: 1.18,
+                }}
+              >
+                评论区留下你的预测，看这轮系列赛会不会按纸面剧本走。
+              </div>
+            </div>
+
+            <div
+              style={{
+                padding: "22px 24px",
+                borderRadius: 28,
+                background: `${homeTheme.colors.primary}14`,
+                border: `1px solid ${homeTheme.colors.primary}30`,
+              }}
+            >
+              <div style={{color: neutral.sky, fontSize: 12, fontWeight: 800, letterSpacing: 1.6}}>
+                MATCHUP NOTE
+              </div>
+              <div
+                style={{
+                  marginTop: 12,
+                  color: neutral.cream,
+                  fontSize: 24,
+                  fontWeight: 800,
+                  lineHeight: 1.1,
+                }}
+              >
+                {data.closingNote}
+              </div>
+            </div>
           </div>
         </div>
       </AbsoluteFill>
 
       <BottomTicker
         left={`${data.teams.home.name} vs ${data.teams.away.name}`}
-        center={`${data.schedule.matchup}`}
+        center={data.schedule.matchup}
         right="评论区见"
         homeTheme={homeTheme}
         awayTheme={awayTheme}
