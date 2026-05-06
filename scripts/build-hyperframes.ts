@@ -233,7 +233,7 @@ const html = `<!doctype html>
         height: ${HEIGHT}px;
         overflow: hidden;
         color: var(--paper);
-        font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Impact, sans-serif;
+        font-family: system-ui, sans-serif;
         background: #020403;
       }
 
@@ -422,7 +422,7 @@ const html = `<!doctype html>
 
       .cold-copy h1 {
         margin-top: 24px;
-        font-family: Impact, "Noto Sans SC", sans-serif;
+        font-family: system-ui, sans-serif;
         font-size: 156px;
         font-weight: 1000;
         line-height: 0.86;
@@ -511,7 +511,7 @@ const html = `<!doctype html>
       .keys-header h2,
       .verdict-copy h2 {
         margin-top: 18px;
-        font-family: Impact, "Noto Sans SC", sans-serif;
+        font-family: system-ui, sans-serif;
         font-size: 104px;
         font-weight: 1000;
         line-height: 0.92;
@@ -661,7 +661,7 @@ const html = `<!doctype html>
         left: 20px;
         z-index: 2;
         color: rgba(255,243,208,0.24);
-        font-family: Impact, sans-serif;
+        font-family: system-ui, sans-serif;
         font-size: 92px;
         line-height: 1;
       }
@@ -727,7 +727,7 @@ const html = `<!doctype html>
 
       .key-number {
         color: rgba(255,243,208,0.24);
-        font-family: Impact, sans-serif;
+        font-family: system-ui, sans-serif;
         font-size: 96px;
         line-height: 1;
       }
@@ -807,7 +807,7 @@ const html = `<!doctype html>
       .cta-card strong {
         display: block;
         margin-top: 18px;
-        font-family: Impact, "Noto Sans SC", sans-serif;
+        font-family: system-ui, sans-serif;
         font-size: 88px;
         line-height: 0.94;
       }
