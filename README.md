@@ -1,6 +1,6 @@
 # nba-r
 
-Reusable Remotion workspace for NBA matchup videos.
+HyperFrames workspace for NBA matchup videos.
 
 The repo is built around one repeatable path:
 
@@ -8,12 +8,11 @@ The repo is built around one repeatable path:
 2. store claims in typed local data
 3. render through the reusable template system
 
-The current example is `Celtics76ersPreviewExample`, backed by `src/data/matchups/celtics-sixers.ts` and rendered through the unified short-form preview pipeline.
+The current example is the Celtics vs 76ers preview, backed by `src/data/matchups/celtics-sixers.ts` and emitted as a HyperFrames composition through `scripts/build-hyperframes.ts`.
 
-## Compositions
+## Composition
 
-- `Celtics76ersPreviewExample`: the single active Celtics vs 76ers preview composition
-- `NBAPlayoffPulse`: earlier style-study opener
+- `main`: the active HyperFrames composition generated into `index.html`
 
 ## Commands
 
@@ -23,17 +22,31 @@ Install dependencies:
 npm install
 ```
 
-Start Remotion Studio:
+Build the composition HTML:
 
 ```bash
-npm run dev -- --browser-executable="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+npm run build
+```
+
+Validate media assets:
+
+```bash
+npm run check:assets
+```
+
+Preview in HyperFrames Studio:
+
+```bash
+npm run preview
 ```
 
 Render the current matchup preview:
 
 ```bash
-./node_modules/.bin/remotion render src/index.ts Celtics76ersPreviewExample out/celtics-76ers-preview.mp4 --browser-executable="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --concurrency=1
+npm run render
 ```
+
+The render step writes `out/celtics-76ers-preview.raw.mp4` first, then normalizes audio loudness into `out/celtics-76ers-preview.mp4`.
 
 Generate Chinese TTS locally:
 
@@ -44,7 +57,7 @@ scripts/generate-edge-tts.sh public/audio/celtics-sixers-zh-tts.mp3 docs/sample-
 Type-check:
 
 ```bash
-./node_modules/.bin/tsc --noEmit
+npm run lint
 ```
 
 ## Project layout
@@ -52,7 +65,9 @@ Type-check:
 - `src/data`: local source-of-truth for matchup facts and source links
 - `src/templates`: generic render templates
 - `src/themes`: reusable team-level visual definitions
-- `src/CelticsSixersPreview.tsx`: thin example wrapper around the generic matchup template
+- `scripts/build-hyperframes.ts`: generates the active HyperFrames `index.html`
+- `scripts/check-assets.ts`: fails fast when raster assets are actually HTML or otherwise malformed
+- `index.html`: generated composition entrypoint for preview/render
 - `tools`: standalone review utilities for workflow and segmented media inspection
 - `public/assets`: logos, player images, and other local media
 - `docs`: reusable workflow and sourcing notes for future requests

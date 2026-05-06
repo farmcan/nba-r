@@ -1,12 +1,13 @@
 {
   "name": "nba-r",
   "version": "1.0.0",
-  "description": "Reusable Remotion workspace for NBA matchup videos",
+  "description": "HyperFrames workspace for NBA matchup videos",
   "scripts": {
-    "dev": "remotion studio",
-    "build": "remotion bundle",
-    "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "check:assets": "tsx scripts/check-assets.ts",
+    "build": "npm run check:assets && tsx scripts/build-hyperframes.ts",
+    "preview": "npm run build && hyperframes preview .",
+    "render": "npm run build && hyperframes render . -o out/celtics-76ers-preview.raw.mp4 && ffmpeg -y -i out/celtics-76ers-preview.raw.mp4 -map 0:v:0 -map 0:a:0 -c:v copy -af loudnorm=I=-16:TP=-1.5:LRA=11:linear=false -c:a aac -b:a 192k -ar 48000 -movflags +faststart out/celtics-76ers-preview.mp4",
+    "lint": "npm run check:assets && tsc --noEmit && hyperframes lint ."
   },
   "repository": {
     "type": "git",
@@ -14,25 +15,18 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@remotion/cli": "4.0.448",
-    "@remotion/motion-blur": "4.0.448",
-    "@remotion/transitions": "4.0.448",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "remotion": "4.0.448"
+    "gsap": "^3.13.0",
+    "hyperframes": "^0.4.32"
   },
   "devDependencies": {
-    "@remotion/eslint-config-flat": "4.0.448",
-    "@types/react": "19.2.7",
-    "@types/web": "0.0.166",
-    "eslint": "9.19.0",
     "prettier": "3.8.1",
+    "tsx": "^4.20.6",
     "typescript": "5.9.3"
   },
   "private": true,
   "main": "index.js",
   "keywords": [
-    "remotion",
+    "hyperframes",
     "nba",
     "video",
     "playoffs"
