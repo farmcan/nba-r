@@ -158,6 +158,7 @@ Premium staging note:
 
 - Reference phone mockup tools use device rotation, environment lighting, reflective highlights, and cinematic background gradients to make the screen feel like a product shot.
 - This repo applies that only to the standalone phone showcase wrapper, not inside the X UI, so the platform interface stays recognizable.
+- The current wrapper uses a restrained 2.5D device frame: readable UI plane, separate dark backplate, side thickness, glass sweep, floor shadow, and ambient spotlights.
 
 ### 3c. Hupu Official-Lite Rating
 

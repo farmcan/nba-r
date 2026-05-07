@@ -1248,34 +1248,39 @@
         width: 520px;
       }
       .template-frame.phone-showcase {
+        --device-radius: 58px;
         transform-style: preserve-3d;
-        transform: rotateX(8deg) rotateY(-16deg) rotateZ(1.5deg) translate3d(0, -10px, 0);
-        animation: hf-device-float 7.5s ease-in-out infinite;
-        filter: drop-shadow(58px 44px 48px rgba(0,0,0,0.42));
+        transform: rotateX(3deg) rotateY(-7deg) rotateZ(-1.2deg) translate3d(0, -8px, 0);
+        animation: hf-device-float 8s ease-in-out infinite;
       }
       .template-frame.phone-showcase::before {
         content: "";
         position: absolute;
-        inset: 5% -8% 6% 76%;
+        inset: 2.5% -3.5% 1.8% 6%;
         z-index: -1;
-        border-radius: 34px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(0,0,0,0.42));
-        transform: translateZ(-42px) rotateY(72deg);
-        filter: blur(1px);
-        opacity: 0.66;
+        border-radius: var(--device-radius);
+        background:
+          linear-gradient(90deg, rgba(255,255,255,0.14), rgba(33,38,45,0.74) 6%, rgba(5,7,10,0.82) 18%, rgba(0,0,0,0.84)),
+          linear-gradient(180deg, rgba(255,255,255,0.14), transparent 28%, rgba(0,0,0,0.42));
+        box-shadow:
+          36px 44px 70px rgba(0,0,0,0.48),
+          14px 12px 0 rgba(16,21,28,0.62),
+          inset 0 0 0 1px rgba(255,255,255,0.16);
+        opacity: 0.86;
+        transform: translate3d(20px, 14px, -56px);
       }
       .template-frame.phone-showcase::after {
         content: "";
         position: absolute;
-        inset: -8% 5% 16% 8%;
+        inset: -2% 6% 20% 8%;
         z-index: 5;
         pointer-events: none;
-        border-radius: 56px;
+        border-radius: var(--device-radius);
         background:
-          linear-gradient(112deg, transparent 0 31%, rgba(255,255,255,0.24) 38%, rgba(255,255,255,0.06) 44%, transparent 54%),
-          radial-gradient(circle at 18% 10%, rgba(255,255,255,0.18), transparent 18%);
+          linear-gradient(112deg, transparent 0 30%, rgba(255,255,255,0.18) 39%, rgba(255,255,255,0.04) 46%, transparent 56%),
+          radial-gradient(circle at 20% 9%, rgba(255,255,255,0.14), transparent 17%);
         mix-blend-mode: screen;
-        opacity: 0.72;
+        opacity: 0.56;
         transform: translateZ(70px);
       }
       .template-frame.phone-showcase .hf-mobile-feed::before,
@@ -1287,15 +1292,20 @@
       .template-frame.phone-showcase .hf-hupu-phone,
       .template-frame.phone-showcase .hf-hupu-lite-phone {
         box-shadow:
-          0 26px 60px rgba(0,0,0,0.46),
-          inset 0 0 0 1px rgba(255,255,255,0.18);
+          0 20px 38px rgba(0,0,0,0.3),
+          inset 0 0 0 1px rgba(255,255,255,0.2);
+      }
+      .template-frame.phone-showcase .hf-mobile-feed,
+      .template-frame.phone-showcase .hf-hupu-phone,
+      .template-frame.phone-showcase .hf-hupu-lite-phone {
+        transform: translateZ(34px);
       }
       @keyframes hf-device-float {
         0%, 100% {
-          transform: rotateX(8deg) rotateY(-16deg) rotateZ(1.5deg) translate3d(0, -10px, 0);
+          transform: rotateX(3deg) rotateY(-7deg) rotateZ(-1.2deg) translate3d(0, -8px, 0);
         }
         50% {
-          transform: rotateX(9.5deg) rotateY(-12deg) rotateZ(0.2deg) translate3d(8px, -24px, 0);
+          transform: rotateX(3.5deg) rotateY(-4deg) rotateZ(-0.4deg) translate3d(6px, -20px, 0);
         }
       }
     </style>
