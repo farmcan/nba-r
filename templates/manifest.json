@@ -1,0 +1,131 @@
+[
+  {
+    "id": "x-mobile-social-feed",
+    "name": "X Mobile Social Feed",
+    "output": "x-mobile-social-feed.html",
+    "description": "Phone-based X-style feed with a player post, action row, replies, and vertical scroll motion.",
+    "bestFor": [
+      "player post",
+      "viral tweet",
+      "reply thread",
+      "social reaction beat"
+    ],
+    "avoidWhen": [
+      "need official source citation",
+      "no social post/comment data"
+    ],
+    "requiredData": [
+      "displayName",
+      "handle",
+      "post body",
+      "metrics",
+      "comments"
+    ],
+    "agentSelection": "Choose when the script says a player posted, fans replied, or the scene should feel like scrolling a phone."
+  },
+  {
+    "id": "hupu-mobile-rating",
+    "name": "Hupu Mobile Rating",
+    "output": "hupu-mobile-rating.html",
+    "description": "Hupu-style mobile rating page with score, JRs count, rating distribution, ranked rows, and hot comments.",
+    "bestFor": [
+      "虎扑评分",
+      "community sentiment",
+      "post-game reaction",
+      "Chinese fan discourse"
+    ],
+    "avoidWhen": [
+      "data must be represented as live Hupu data but has not been fetched"
+    ],
+    "requiredData": [
+      "topic",
+      "subject",
+      "score",
+      "voters",
+      "distribution",
+      "comments"
+    ],
+    "agentSelection": "Choose for Chinese-community rating or hot-comment beats. Label as mock/template unless real Hupu data is fetched."
+  },
+  {
+    "id": "social-post-deck",
+    "name": "Broadcast Social Post Deck",
+    "output": "social-post-deck.html",
+    "description": "Broadcast-friendly social quote cards, less realistic than the mobile feed but useful as lower-third inserts.",
+    "bestFor": [
+      "lower-third quote",
+      "official account post",
+      "reporter quote"
+    ],
+    "avoidWhen": [
+      "the scene specifically asks for phone scrolling"
+    ],
+    "requiredData": [
+      "displayName",
+      "handle",
+      "body"
+    ],
+    "agentSelection": "Choose only when a broadcast package needs clean social quotes, not when simulating a real app."
+  },
+  {
+    "id": "fan-comment-wall",
+    "name": "Fan Comment Wall",
+    "output": "fan-comment-wall.html",
+    "description": "Stacked fan comments for fast community reaction beats.",
+    "bestFor": [
+      "comment section",
+      "debate montage",
+      "fan sentiment"
+    ],
+    "avoidWhen": [
+      "need platform-specific UI"
+    ],
+    "requiredData": [
+      "user",
+      "comment body",
+      "sentiment"
+    ],
+    "agentSelection": "Choose for generic comments; prefer X Mobile Social Feed or Hupu Mobile Rating for platform-specific scenes."
+  },
+  {
+    "id": "sticker-tape",
+    "name": "Sticker Tape",
+    "output": "sticker-tape.html",
+    "description": "Short punchy stickers for meme labels and motion accents.",
+    "bestFor": [
+      "hot take",
+      "key label",
+      "meme overlay",
+      "transition accent"
+    ],
+    "avoidWhen": [
+      "needs long copy"
+    ],
+    "requiredData": [
+      "short labels"
+    ],
+    "agentSelection": "Choose as a supporting overlay, not as a full scene."
+  },
+  {
+    "id": "producer-rundown",
+    "name": "Producer Rundown",
+    "output": "producer-rundown.html",
+    "description": "Broadcast producer cue list for behind-the-scenes or show-control visuals.",
+    "bestFor": [
+      "rundown",
+      "editorial planning",
+      "show package",
+      "meta transition"
+    ],
+    "avoidWhen": [
+      "viewer should stay inside the game story"
+    ],
+    "requiredData": [
+      "timecode",
+      "title",
+      "status",
+      "source"
+    ],
+    "agentSelection": "Choose when the script intentionally references production flow or a control-room aesthetic."
+  }
+]

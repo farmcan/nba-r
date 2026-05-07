@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NBA Social Overlay Templates</title>
+    <title>Producer Rundown</title>
     <style>
       
   .hf-template-shell {
@@ -53,6 +53,7 @@
   }
 
   .hf-social-deck,
+  .hf-mobile-feed,
   .hf-comment-wall,
   .hf-rating-panel,
   .hf-rundown-panel {
@@ -67,6 +68,7 @@
   }
 
   .hf-social-deck::before,
+  .hf-mobile-feed::before,
   .hf-comment-wall::before,
   .hf-rating-panel::before,
   .hf-rundown-panel::before {
@@ -82,6 +84,246 @@
 
   .hf-social-deck {
     padding: 24px;
+  }
+
+  .hf-mobile-feed {
+    width: min(430px, 100%);
+    min-height: 780px;
+    margin: 0 auto;
+    padding: 16px;
+    border-radius: 48px;
+    background:
+      linear-gradient(145deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04)),
+      rgba(2,4,6,0.84);
+    box-shadow:
+      0 36px 110px rgba(0,0,0,0.52),
+      inset 0 0 0 9px rgba(255,255,255,0.08);
+  }
+
+  .hf-phone-screen {
+    position: relative;
+    overflow: hidden;
+    min-height: 748px;
+    border-radius: 34px;
+    background: #070a0f;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .hf-phone-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+    padding: 0 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: rgba(7,10,15,0.9);
+    backdrop-filter: blur(12px);
+    color: var(--hf-paper);
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  .hf-x-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: rgba(7,10,15,0.92);
+  }
+
+  .hf-x-tab {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 46px;
+    color: rgba(239,243,244,0.72);
+    font-size: 15px;
+    font-weight: 850;
+  }
+
+  .hf-x-tab.is-active {
+    color: #eff3f4;
+  }
+
+  .hf-x-tab.is-active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 58px;
+    height: 4px;
+    border-radius: 999px;
+    background: #1d9bf0;
+  }
+
+  .hf-feed-scroll {
+    height: 648px;
+    overflow: hidden;
+  }
+
+  .hf-feed-scroll-inner {
+    padding: 12px 14px 70px;
+    animation: hf-phone-scroll 9s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes hf-phone-scroll {
+    0%, 18% {
+      transform: translateY(0);
+    }
+    42%, 58% {
+      transform: translateY(-118px);
+    }
+    82%, 100% {
+      transform: translateY(-236px);
+    }
+  }
+
+  .hf-mobile-post {
+    padding: 16px 0 14px;
+    border-bottom: 1px solid rgba(47,51,54,0.95);
+  }
+
+  .hf-mobile-author {
+    display: grid;
+    grid-template-columns: 46px 1fr auto;
+    gap: 11px;
+    align-items: center;
+  }
+
+  .hf-mobile-avatar {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--post-color, var(--hf-home));
+    color: white;
+    font-weight: 1000;
+  }
+
+  .hf-mobile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hf-mobile-name {
+    color: var(--hf-paper);
+    font-size: 16px;
+    font-weight: 950;
+  }
+
+  .hf-mobile-handle {
+    margin-top: 2px;
+    color: rgba(255,243,208,0.52);
+    font-size: 13px;
+    font-weight: 750;
+  }
+
+  .hf-follow-chip {
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: var(--hf-paper);
+    color: var(--hf-ink);
+    font-size: 12px;
+    font-weight: 1000;
+  }
+
+  .hf-mobile-body {
+    margin-top: 14px;
+    color: #eff3f4;
+    font-size: 20px;
+    font-weight: 850;
+    line-height: 1.24;
+  }
+
+  .hf-mobile-image {
+    margin-top: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--post-color, var(--hf-home)), rgba(255,255,255,0.08));
+  }
+
+  .hf-mobile-image img {
+    display: block;
+    width: 100%;
+    height: 218px;
+    object-fit: cover;
+  }
+
+  .hf-mobile-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    color: #71767b;
+    font-size: 13px;
+    font-weight: 850;
+  }
+
+  .hf-reply-thread {
+    margin-top: 10px;
+    padding-left: 56px;
+  }
+
+  .hf-reply {
+    position: relative;
+    padding: 12px 0;
+    border-top: 1px solid rgba(47,51,54,0.95);
+  }
+
+  .hf-reply::before {
+    content: "";
+    position: absolute;
+    top: -11px;
+    bottom: 18px;
+    left: -34px;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.22), transparent);
+  }
+
+  .hf-reply-name {
+    color: #eff3f4;
+    font-size: 13px;
+    font-weight: 1000;
+  }
+
+  .hf-reply-body {
+    margin-top: 5px;
+    color: rgba(255,243,208,0.88);
+    font-size: 15px;
+    font-weight: 780;
+    line-height: 1.25;
+  }
+
+  .hf-reply-handle {
+    color: #71767b;
+    font-weight: 760;
+  }
+
+  .hf-scroll-hint {
+    position: absolute;
+    right: 20px;
+    bottom: 18px;
+    left: 20px;
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .hf-scroll-pill {
+    padding: 8px 12px;
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px;
+    background: rgba(0,0,0,0.64);
+    color: rgba(255,243,208,0.82);
+    font-size: 12px;
+    font-weight: 1000;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   .hf-post-card {
@@ -349,17 +591,249 @@
     text-transform: uppercase;
   }
 
+  .hf-hupu-phone {
+    width: min(430px, 100%);
+    min-height: 780px;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 12px solid #111;
+    border-radius: 44px;
+    background: #f4f4f4;
+    color: #1f1f1f;
+    box-shadow: 0 36px 110px rgba(0,0,0,0.48);
+  }
+
+  .hf-hupu-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 34px;
+    padding: 0 18px;
+    background: #ff6a00;
+    color: white;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  .hf-hupu-nav {
+    display: grid;
+    grid-template-columns: 42px 1fr 42px;
+    align-items: center;
+    height: 46px;
+    padding: 0 12px;
+    background: #ff6a00;
+    color: white;
+    font-size: 17px;
+    font-weight: 950;
+  }
+
+  .hf-hupu-nav span:nth-child(2) {
+    text-align: center;
+  }
+
+  .hf-hupu-page {
+    height: 688px;
+    overflow: hidden;
+    background: #f5f5f5;
+  }
+
+  .hf-hupu-scroll {
+    padding: 12px;
+    animation: hf-hupu-scroll 10s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes hf-hupu-scroll {
+    0%, 24% {
+      transform: translateY(0);
+    }
+    52%, 66% {
+      transform: translateY(-152px);
+    }
+    90%, 100% {
+      transform: translateY(-298px);
+    }
+  }
+
+  .hf-hupu-card {
+    overflow: hidden;
+    border-radius: 14px;
+    background: white;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+  }
+
+  .hf-hupu-hero {
+    padding: 18px 16px 16px;
+    background:
+      linear-gradient(135deg, rgba(255,106,0,0.14), rgba(255,255,255,0)),
+      white;
+  }
+
+  .hf-hupu-topic {
+    color: #999;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .hf-hupu-subject {
+    margin-top: 6px;
+    color: #1f1f1f;
+    font-size: 24px;
+    font-weight: 1000;
+    line-height: 1.08;
+  }
+
+  .hf-hupu-tagline {
+    margin-top: 8px;
+    color: #666;
+    font-size: 14px;
+    font-weight: 760;
+  }
+
+  .hf-hupu-score-line {
+    display: grid;
+    grid-template-columns: 118px 1fr;
+    gap: 16px;
+    align-items: center;
+    margin-top: 18px;
+  }
+
+  .hf-hupu-score {
+    color: #ff6a00;
+    font-size: 72px;
+    font-weight: 1000;
+    line-height: 0.9;
+  }
+
+  .hf-hupu-score small {
+    display: block;
+    margin-top: 7px;
+    color: #999;
+    font-size: 13px;
+    font-weight: 850;
+  }
+
+  .hf-hupu-rate-button {
+    display: grid;
+    place-items: center;
+    height: 42px;
+    border-radius: 999px;
+    background: #ff6a00;
+    color: white;
+    font-size: 16px;
+    font-weight: 1000;
+  }
+
+  .hf-hupu-bars {
+    display: grid;
+    gap: 7px;
+    margin-top: 14px;
+  }
+
+  .hf-hupu-bar {
+    display: grid;
+    grid-template-columns: 36px 1fr 54px;
+    gap: 8px;
+    align-items: center;
+    color: #888;
+    font-size: 12px;
+    font-weight: 850;
+  }
+
+  .hf-hupu-bar-track {
+    height: 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #eee;
+  }
+
+  .hf-hupu-bar-fill {
+    width: var(--hupu-value);
+    height: 100%;
+    background: #ff6a00;
+  }
+
+  .hf-hupu-list {
+    margin-top: 12px;
+    overflow: hidden;
+    border-radius: 14px;
+    background: white;
+  }
+
+  .hf-hupu-list-title {
+    padding: 13px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #1f1f1f;
+    font-size: 16px;
+    font-weight: 1000;
+  }
+
+  .hf-hupu-row {
+    display: grid;
+    grid-template-columns: 34px 1fr 48px;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 14px;
+    border-bottom: 1px solid #f3f3f3;
+  }
+
+  .hf-hupu-row b {
+    color: #ff6a00;
+    font-size: 15px;
+  }
+
+  .hf-hupu-row span {
+    color: #222;
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  .hf-hupu-row small {
+    display: block;
+    margin-top: 3px;
+    color: #999;
+    font-size: 11px;
+    font-weight: 780;
+  }
+
+  .hf-hupu-row strong {
+    color: #ff6a00;
+    font-size: 21px;
+    font-weight: 1000;
+    text-align: right;
+  }
+
+  .hf-hupu-comment {
+    padding: 13px 14px;
+    border-bottom: 1px solid #f3f3f3;
+  }
+
+  .hf-hupu-comment strong {
+    color: #333;
+    font-size: 14px;
+  }
+
+  .hf-hupu-comment p {
+    margin: 6px 0 0;
+    color: #444;
+    font-size: 14px;
+    font-weight: 780;
+    line-height: 1.32;
+  }
+
+  .hf-hupu-comment small {
+    color: #aaa;
+    font-size: 12px;
+  }
 
       body {
         margin: 0;
         min-height: 100vh;
         background:
-          radial-gradient(circle at 16% 12%, #007A3388, transparent 28%),
-          radial-gradient(circle at 84% 20%, #006BB688, transparent 30%),
+          radial-gradient(circle at 15% 12%, #007A3388, transparent 30%),
+          radial-gradient(circle at 85% 22%, #006BB688, transparent 30%),
           linear-gradient(135deg, #030608, #07111a 58%, #050607);
       }
-
-      .gallery {
+      .template-stage {
         
   --hf-home: #007A33;
   --hf-away: #006BB6;
@@ -367,161 +841,19 @@
   --hf-paper: #fff3d0;
   --hf-ink: #06080b;
 
-        max-width: 1480px;
-        margin: 0 auto;
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
         padding: 56px;
       }
-
-      .gallery-hero {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 32px;
-        align-items: end;
-        margin-bottom: 34px;
-        color: var(--hf-paper);
-      }
-
-      .gallery-hero h1 {
-        margin: 0;
-        max-width: 920px;
-        font-size: 74px;
-        line-height: 0.94;
-      }
-
-      .gallery-hero p {
-        margin: 16px 0 0;
-        max-width: 780px;
-        color: rgba(255,243,208,0.72);
-        font-size: 22px;
-        font-weight: 750;
-        line-height: 1.32;
-      }
-
-      .gallery-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 24px;
-      }
-
-      .gallery-card {
-        min-height: 360px;
-      }
-
-      .gallery-wide {
-        grid-column: 1 / -1;
-        padding: 26px;
-        border: 1px solid rgba(255,255,255,0.16);
-        background: rgba(255,255,255,0.08);
+      .template-frame {
+        width: 720px;
       }
     </style>
   </head>
   <body>
-    <main class="gallery hf-template-shell">
-      <header class="gallery-hero">
-        <div>
-          <div class="hf-panel-title">Template Gallery</div>
-          <h1>NBA Social Overlay Templates</h1>
-          <p>Prebuilt HyperFrames social/broadcast overlays: posts, comments, Hupu-style ratings, stickers, and producer rundown panels.</p>
-        </div>
-        
-  <div class="hf-sticker-tape">
-    <span class="hf-sticker" data-tone="warning" style="--tilt: -2.5deg">UPSET WATCH</span><span class="hf-sticker" data-tone="cold" style="--tilt: 2deg">FIRST ACTION</span><span class="hf-sticker" data-tone="neutral" style="--tilt: -2.5deg">BOSTON DEPTH</span><span class="hf-sticker" data-tone="hot" style="--tilt: 2deg">HOT TAKE</span><span class="hf-sticker" data-tone="warning" style="--tilt: -2.5deg">KEY 01</span>
-  </div>
-
-      </header>
-      <section class="gallery-grid">
-        <div class="gallery-card">
-  <section class="hf-social-deck">
-    <div class="hf-panel-title">Social Pulse</div>
-    
-          <article class="hf-post-card" style="--post-color: #007A33">
-            <div class="hf-post-avatar"><img src="../public/assets/nba-logo.svg" alt="NBA" /></div>
-            <div>
-              <div class="hf-post-meta">
-                <strong>NBA</strong>
-                <span class="hf-verified">✓</span>
-                <span>@NBA</span>
-                <span>pregame</span>
-              </div>
-              <div class="hf-post-body">G1 is not just seed vs seed. It is Boston&#39;s structure against Philadelphia&#39;s first-action pressure.</div>
-              <div class="hf-post-metrics"><span>1.8K replies</span><span>4.2K reposts</span><span>29K likes</span></div>
-              <span class="hf-source">social post template</span>
-            </div>
-          </article>
-        
-          <article class="hf-post-card" style="--post-color: #007A33">
-            <div class="hf-post-avatar"><img src="../public/assets/logos/celtics.svg" alt="Celtics Watch" /></div>
-            <div>
-              <div class="hf-post-meta">
-                <strong>Celtics Watch</strong>
-                <span class="hf-verified">✓</span>
-                <span>@celtics_stats</span>
-                <span>series pulse</span>
-              </div>
-              <div class="hf-post-body">If Tatum and Brown keep forcing help early, the Sixers have to win the second side all night.</div>
-              <div class="hf-post-metrics"><span>412 replies</span><span>980 reposts</span><span>8.6K likes</span></div>
-              
-            </div>
-          </article>
-        
-  </section>
-</div>
-        <div class="gallery-card">
-  <section class="hf-comment-wall">
-    <div class="hf-panel-title">Comment Section</div>
-    
-          <article class="hf-comment-bubble" style="--comment-color: #007A33">
-            <div class="hf-comment-user"><span>greenline_18</span><span>belief</span></div>
-            <div class="hf-comment-body">别只看 2 打 7，费城第一节能不能顶住才是重点。</div>
-          </article>
-        
-          <article class="hf-comment-bubble" style="--comment-color: #006BB6">
-            <div class="hf-comment-user"><span>philly_run</span><span>hype</span></div>
-            <div class="hf-comment-body">马克西只要把第一道防线打退，这轮不会轻松。</div>
-          </article>
-        
-          <article class="hf-comment-bubble" style="--comment-color: #2d8cff">
-            <div class="hf-comment-user"><span>half_court_lab</span><span>tactical</span></div>
-            <div class="hf-comment-body">真正看点是弱侧协防：谁先让对面轮转慢半拍。</div>
-          </article>
-        
-  </section>
-</div>
-        <div class="gallery-card">
-    <section class="hf-rating-panel">
-      <div class="hf-panel-title">Hupu-Style Rating</div>
-      <div class="hf-rating-hero">
-              <div class="hf-rating-score">9.1</div>
-              <div>
-                <h3>杰森·塔图姆 · 高分预警</h3>
-                <p>8,214 JRs 参与评分 · 社区评分模板，不代表实时抓取数据</p>
-              </div>
-            </div>
-      
-            <div class="hf-rating-row" style="--row-color: #007A33">
-              <b>01</b>
-              <span>杰森·塔图姆 <small>凯尔特人</small></span>
-              <strong>9.1</strong>
-              <small>高分预警</small>
-            </div>
-          
-            <div class="hf-rating-row" style="--row-color: #006BB6">
-              <b>02</b>
-              <span>泰瑞斯·马克西 <small>76人</small></span>
-              <strong>8.8</strong>
-              <small>爆点观察</small>
-            </div>
-          
-            <div class="hf-rating-row" style="--row-color: #007A33">
-              <b>03</b>
-              <span>杰伦·布朗 <small>凯尔特人</small></span>
-              <strong>8.6</strong>
-              <small>稳定输出</small>
-            </div>
-          
-    </section>
-  </div>
-        <div class="gallery-card">
+    <main class="template-stage hf-template-shell">
+      <div class="template-frame">
   <section class="hf-rundown-panel">
     <div class="hf-panel-title">Producer Rundown</div>
     
@@ -572,12 +904,6 @@
         
   </section>
 </div>
-        <div class="gallery-wide">
-  <div class="hf-sticker-tape">
-    <span class="hf-sticker" data-tone="warning" style="--tilt: -2.5deg">UPSET WATCH</span><span class="hf-sticker" data-tone="cold" style="--tilt: 2deg">FIRST ACTION</span><span class="hf-sticker" data-tone="neutral" style="--tilt: -2.5deg">BOSTON DEPTH</span><span class="hf-sticker" data-tone="hot" style="--tilt: 2deg">HOT TAKE</span><span class="hf-sticker" data-tone="warning" style="--tilt: -2.5deg">KEY 01</span>
-  </div>
-</div>
-      </section>
     </main>
   </body>
 </html>
