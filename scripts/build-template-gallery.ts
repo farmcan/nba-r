@@ -4,6 +4,7 @@ import {celticsSixersPreview} from "../src/data/matchups/celtics-sixers";
 import {getTeamTheme} from "../src/themes/teams";
 import {
   FanComment,
+  HupuOfficialLiteRating,
   HupuMobileRating,
   MobileFeedPost,
   RatingRow,
@@ -12,6 +13,7 @@ import {
   Sticker,
   TemplateDefinition,
   renderFanCommentWall,
+  renderHupuOfficialLiteRating,
   renderHupuMobileRating,
   renderMobileSocialFeed,
   renderProducerRundown,
@@ -176,6 +178,16 @@ const hupuRating: HupuMobileRating = {
   ],
 };
 
+const hupuOfficialLiteRating: HupuOfficialLiteRating = {
+  category: "NBA季后赛评分",
+  title: "凯尔特人 vs 76人 G1 赛前印象",
+  subtitle: "社区评分模板 · 非实时抓取数据",
+  score: "8.7",
+  voters: "12,486",
+  distribution: ["58.42%", "18.16%", "9.74%", "5.31%", "8.37%"],
+  footerCount: "3.4万讨论",
+};
+
 const stickers: Sticker[] = [
   {label: "UPSET WATCH", tone: "warning"},
   {label: "FIRST ACTION", tone: "cold"},
@@ -212,6 +224,16 @@ const templateDefinitions: TemplateDefinition[] = [
     avoidWhen: ["data must be represented as live Hupu data but has not been fetched"],
     requiredData: ["topic", "subject", "score", "voters", "distribution", "comments"],
     agentSelection: "Choose for Chinese-community rating or hot-comment beats. Label as mock/template unless real Hupu data is fetched.",
+  },
+  {
+    id: "hupu-official-lite-rating",
+    name: "Hupu Official-Lite Rating",
+    output: "hupu-official-lite-rating.html",
+    description: "Closer to the accessible Hupu mobile score page: title, item, score, JRs rating, immediate rating button, percentages, open app/share footer.",
+    bestFor: ["官网简版虎扑评分", "single player/item score", "mobile web rating card"],
+    avoidWhen: ["need full in-app ranking or hot comments"],
+    requiredData: ["category", "title", "subtitle", "score", "voters", "distribution"],
+    agentSelection: "Choose when matching the public Hupu mobile score page is more important than showing a richer app-like ranking board.",
   },
   {
     id: "social-post-deck",
@@ -258,10 +280,11 @@ const templateDefinitions: TemplateDefinition[] = [
 const pages: Array<{definition: TemplateDefinition; html: string; width?: string}> = [
   {definition: templateDefinitions[0], html: renderMobileSocialFeed(mobileFeed), width: "520px"},
   {definition: templateDefinitions[1], html: renderHupuMobileRating(hupuRating), width: "520px"},
-  {definition: templateDefinitions[2], html: renderSocialPostDeck(posts), width: "760px"},
-  {definition: templateDefinitions[3], html: renderFanCommentWall(comments), width: "680px"},
-  {definition: templateDefinitions[4], html: renderStickerTape(stickers), width: "900px"},
-  {definition: templateDefinitions[5], html: renderProducerRundown(rundown), width: "720px"},
+  {definition: templateDefinitions[2], html: renderHupuOfficialLiteRating(hupuOfficialLiteRating), width: "520px"},
+  {definition: templateDefinitions[3], html: renderSocialPostDeck(posts), width: "760px"},
+  {definition: templateDefinitions[4], html: renderFanCommentWall(comments), width: "680px"},
+  {definition: templateDefinitions[5], html: renderStickerTape(stickers), width: "900px"},
+  {definition: templateDefinitions[6], html: renderProducerRundown(rundown), width: "720px"},
 ];
 
 const writeText = async (relativePath: string, content: string): Promise<void> => {

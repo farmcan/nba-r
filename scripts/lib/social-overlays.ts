@@ -66,6 +66,16 @@ export type HupuMobileRating = {
   comments: HupuRatingComment[];
 };
 
+export type HupuOfficialLiteRating = {
+  category: string;
+  title: string;
+  subtitle: string;
+  score: string;
+  voters: string;
+  distribution: string[];
+  footerCount: string;
+};
+
 export type Sticker = {
   label: string;
   tone: "hot" | "cold" | "neutral" | "warning";
@@ -264,6 +274,28 @@ export const socialOverlayStyles = (): string => `
     font-size: 21px;
   }
 
+  .hf-x-detailbar {
+    display: grid;
+    grid-template-columns: 38px 1fr 38px;
+    align-items: center;
+    height: 48px;
+    padding: 0 14px;
+    border-bottom: 1px solid #2f3336;
+    background: rgba(0,0,0,0.96);
+  }
+
+  .hf-x-back {
+    color: #e7e9ea;
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .hf-x-detail-title {
+    color: #e7e9ea;
+    font-size: 17px;
+    font-weight: 800;
+  }
+
   .hf-x-tabs {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -296,7 +328,7 @@ export const socialOverlayStyles = (): string => `
   }
 
   .hf-feed-scroll {
-    height: 670px;
+    height: 720px;
     overflow: hidden;
   }
 
@@ -425,6 +457,18 @@ export const socialOverlayStyles = (): string => `
     border-bottom: 1px solid #2f3336;
   }
 
+  .hf-reply-context {
+    margin-bottom: 4px;
+    color: #71767b;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .hf-reply-context b {
+    color: #1d9bf0;
+    font-weight: 600;
+  }
+
   .hf-reply::before {
     content: "";
     position: absolute;
@@ -480,6 +524,75 @@ export const socialOverlayStyles = (): string => `
     color: #e7e9ea;
     font-size: 19px;
     place-items: center;
+  }
+
+  .hf-x-reply-composer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    height: 54px;
+    padding: 0 14px;
+    border-top: 1px solid #2f3336;
+    background: rgba(0,0,0,0.97);
+  }
+
+  .hf-x-composer-avatar {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--post-color, #1d9bf0);
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .hf-x-composer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hf-x-composer-placeholder {
+    color: #71767b;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .hf-x-reply-button {
+    padding: 7px 13px;
+    border-radius: 999px;
+    background: #1d9bf0;
+    color: white;
+    font-size: 13px;
+    font-weight: 850;
+  }
+
+  .hf-x-detail-footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 14px 0 66px;
+    padding: 10px 12px;
+    border: 1px solid #2f3336;
+    border-radius: 999px;
+    color: #71767b;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .hf-x-detail-footer b {
+    color: #1d9bf0;
+    font-weight: 800;
   }
 
   .hf-post-card {
@@ -1040,6 +1153,140 @@ export const socialOverlayStyles = (): string => `
     font-size: 12px;
   }
 
+  .hf-hupu-lite-phone {
+    width: min(430px, 100%);
+    margin: 0 auto;
+    overflow: hidden;
+    border: 12px solid #111;
+    border-radius: 44px;
+    background: #fff;
+    color: #1f1f1f;
+    box-shadow: 0 36px 110px rgba(0,0,0,0.48);
+  }
+
+  .hf-hupu-lite-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #f1f1f1;
+  }
+
+  .hf-hupu-lite-search {
+    display: flex;
+    align-items: center;
+    height: 34px;
+    padding: 0 13px;
+    border-radius: 999px;
+    background: #f5f5f5;
+    color: #aaa;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .hf-hupu-lite-open {
+    color: #ff6a00;
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  .hf-hupu-lite-body {
+    padding: 22px 20px 26px;
+  }
+
+  .hf-hupu-lite-category {
+    color: #777;
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  .hf-hupu-lite-title {
+    margin-top: 14px;
+    color: #222;
+    font-size: 28px;
+    font-weight: 1000;
+    line-height: 1.1;
+  }
+
+  .hf-hupu-lite-subtitle {
+    margin-top: 8px;
+    color: #555;
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .hf-hupu-lite-score {
+    margin-top: 26px;
+    color: #ff6a00;
+    font-size: 92px;
+    font-weight: 1000;
+    line-height: 0.86;
+  }
+
+  .hf-hupu-lite-voters {
+    margin-top: 10px;
+    color: #777;
+    font-size: 17px;
+    font-weight: 900;
+  }
+
+  .hf-hupu-lite-button {
+    display: grid;
+    place-items: center;
+    height: 46px;
+    margin-top: 18px;
+    border-radius: 999px;
+    background: #ff6a00;
+    color: white;
+    font-size: 17px;
+    font-weight: 1000;
+  }
+
+  .hf-hupu-lite-bars {
+    display: grid;
+    gap: 13px;
+    margin-top: 22px;
+  }
+
+  .hf-hupu-lite-percent {
+    display: grid;
+    grid-template-columns: 1fr 72px;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .hf-hupu-lite-track {
+    height: 12px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #f0f0f0;
+  }
+
+  .hf-hupu-lite-fill {
+    width: var(--hupu-lite-value);
+    height: 100%;
+    background: #ff6a00;
+  }
+
+  .hf-hupu-lite-percent strong {
+    color: #555;
+    font-size: 15px;
+    font-weight: 900;
+    text-align: right;
+  }
+
+  .hf-hupu-lite-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid #f0f0f0;
+    color: #888;
+    font-size: 15px;
+    font-weight: 900;
+  }
+
 `;
 
 export const renderSocialPostDeck = (posts: SocialPost[]): string => `
@@ -1096,12 +1343,7 @@ export const renderMobileSocialFeed = (post: MobileFeedPost): string => `
           <span class="hf-ios-notch"></span>
           <span>5G 82%</span>
         </div>
-      <div class="hf-x-homebar">
-        <div class="hf-x-mini-avatar">${post.avatarSrc ? `<img src="${escapeHtml(post.avatarSrc)}" alt="${escapeHtml(post.displayName)}" />` : ""}</div>
-        <div class="hf-x-logo">𝕏</div>
-        <div class="hf-x-gear">⌕</div>
-      </div>
-      <div class="hf-x-tabs"><div class="hf-x-tab is-active">For you</div><div class="hf-x-tab">Following</div></div>
+      <div class="hf-x-detailbar"><span class="hf-x-back">‹</span><span class="hf-x-detail-title">Post</span><span class="hf-x-gear">⌕</span></div>
       <div class="hf-feed-scroll">
         <div class="hf-feed-scroll-inner">
         <article class="hf-mobile-post">
@@ -1132,6 +1374,7 @@ export const renderMobileSocialFeed = (post: MobileFeedPost): string => `
                 <article class="hf-reply" style="--reply-color: ${comment.teamColor ?? "var(--hf-away)"}">
                   <div class="hf-reply-avatar">${escapeHtml(comment.user.slice(0, 1))}</div>
                   <div>
+                    <div class="hf-reply-context">Replying to <b>${escapeHtml(post.handle)}</b></div>
                     <div class="hf-reply-name">${escapeHtml(comment.user)} <span class="hf-reply-handle">${escapeHtml(comment.handle)} · ${escapeHtml(comment.likes)} likes</span></div>
                     <div class="hf-reply-body">${escapeHtml(comment.body)}</div>
                   </div>
@@ -1151,9 +1394,14 @@ export const renderMobileSocialFeed = (post: MobileFeedPost): string => `
             <div class="hf-mobile-body">Second side has to be ready. One rotation late and Boston turns it into a run.</div>
           </div>
         </article>
+        <div class="hf-x-detail-footer"><span>Post your reply</span><b>Reply</b></div>
         </div>
       </div>
-      <div class="hf-x-bottom-nav"><span>⌂</span><span>⌕</span><span>✦</span><span>♡</span><span>✉</span></div>
+      <div class="hf-x-reply-composer">
+        <div class="hf-x-composer-avatar">${post.avatarSrc ? `<img src="${escapeHtml(post.avatarSrc)}" alt="${escapeHtml(post.displayName)}" />` : escapeHtml(post.displayName.slice(0, 1))}</div>
+        <div class="hf-x-composer-placeholder">Post your reply</div>
+        <div class="hf-x-reply-button">Reply</div>
+      </div>
     </div>
   </section>
 `;
@@ -1218,6 +1466,36 @@ export const renderHupuMobileRating = (rating: HupuMobileRating): string => `
             .join("")}
         </section>
       </div>
+    </div>
+  </section>
+`;
+
+export const renderHupuOfficialLiteRating = (rating: HupuOfficialLiteRating): string => `
+  <section class="hf-hupu-lite-phone">
+    <div class="hf-hupu-lite-header">
+      <div class="hf-hupu-lite-search">搜我想看</div>
+      <div class="hf-hupu-lite-open">打开APP</div>
+    </div>
+    <div class="hf-hupu-lite-body">
+      <div class="hf-hupu-lite-category">${escapeHtml(rating.category)}</div>
+      <div class="hf-hupu-lite-title">${escapeHtml(rating.title)}</div>
+      <div class="hf-hupu-lite-subtitle">${escapeHtml(rating.subtitle)}</div>
+      <div class="hf-hupu-lite-score">${escapeHtml(rating.score)}</div>
+      <div class="hf-hupu-lite-voters">${escapeHtml(rating.voters)} JRs评分</div>
+      <div class="hf-hupu-lite-button">立即评分</div>
+      <div class="hf-hupu-lite-bars">
+        ${rating.distribution
+          .map(
+            (value) => `
+              <div class="hf-hupu-lite-percent">
+                <div class="hf-hupu-lite-track"><div class="hf-hupu-lite-fill" style="--hupu-lite-value: ${escapeHtml(value)}"></div></div>
+                <strong>${escapeHtml(value)}</strong>
+              </div>
+            `,
+          )
+          .join("")}
+      </div>
+      <div class="hf-hupu-lite-footer"><span>打开虎扑APP</span><span>${escapeHtml(rating.footerCount)}</span><span>分享</span></div>
     </div>
   </section>
 `;

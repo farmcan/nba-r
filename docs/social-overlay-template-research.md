@@ -147,6 +147,38 @@ Design requirements:
 - vertical scroll motion
 - synthetic/fake content clearly marked if not a real post
 
+Official comparison note:
+
+- X conversations are public reply/commentary objects around a post, not just generic comment bubbles.
+- For a player-post scene, use the `Post` detail layout with reply cells and `Replying to @handle` context.
+- Use Home timeline tabs only when the scene is literally "scrolling the feed"; otherwise the detail view is more faithful.
+
+### 3c. Hupu Official-Lite Rating
+
+Use for:
+
+- accessible mobile web rating card
+- single player or item rating
+- official-looking score snapshot
+
+Borrowed from:
+
+- Hupu mobile score pages that expose a compact title, score, `JRs评分`, `立即评分`, percentage distribution, `打开虎扑APP`, comment count, and share affordance.
+
+Design requirements:
+
+- light background
+- compact search/open-app header
+- large orange score
+- immediate rating button
+- percentage bars without extra ranking rows
+- no hot comments unless the richer app-style template is selected
+
+Implemented as:
+
+- `templates/hupu-official-lite-rating.html`
+- `templates/manifest.json` entry `hupu-official-lite-rating`
+
 ### 4. Sticker Tape
 
 Use for:
