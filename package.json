@@ -5,6 +5,7 @@
   "scripts": {
     "check:assets": "tsx scripts/check-assets.ts",
     "build": "npm run check:assets && tsx scripts/build-hyperframes.ts",
+    "build:templates": "tsx scripts/build-template-gallery.ts",
     "preview": "npm run build && hyperframes preview .",
     "render": "npm run build && hyperframes render . -o out/celtics-76ers-preview.raw.mp4 && ffmpeg -y -i out/celtics-76ers-preview.raw.mp4 -map 0:v:0 -map 0:a:0 -c:v copy -af loudnorm=I=-16:TP=-1.5:LRA=11:linear=false -c:a aac -b:a 192k -ar 48000 -movflags +faststart out/celtics-76ers-preview.mp4",
     "lint": "npm run check:assets && tsc --noEmit && hyperframes lint ."
