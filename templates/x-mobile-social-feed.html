@@ -88,25 +88,24 @@
 
   .hf-mobile-feed {
     width: min(430px, 100%);
-    min-height: 780px;
+    min-height: 836px;
     margin: 0 auto;
-    padding: 16px;
-    border-radius: 48px;
-    background:
-      linear-gradient(145deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04)),
-      rgba(2,4,6,0.84);
+    padding: 12px;
+    border-radius: 52px;
+    background: #15181c;
     box-shadow:
       0 36px 110px rgba(0,0,0,0.52),
-      inset 0 0 0 9px rgba(255,255,255,0.08);
+      inset 0 0 0 2px rgba(255,255,255,0.14),
+      inset 0 0 0 10px #202327;
   }
 
   .hf-phone-screen {
     position: relative;
     overflow: hidden;
-    min-height: 748px;
-    border-radius: 34px;
-    background: #070a0f;
-    border: 1px solid rgba(255,255,255,0.12);
+    min-height: 812px;
+    border-radius: 40px;
+    background: #000;
+    border: 1px solid #2f3336;
   }
 
   .hf-phone-topbar {
@@ -116,31 +115,75 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 54px;
-    padding: 0 18px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    background: rgba(7,10,15,0.9);
+    height: 42px;
+    padding: 0 19px;
+    background: #000;
     backdrop-filter: blur(12px);
-    color: var(--hf-paper);
-    font-size: 14px;
-    font-weight: 900;
+    color: #e7e9ea;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .hf-ios-notch {
+    width: 86px;
+    height: 24px;
+    border-radius: 999px;
+    background: #050505;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+
+  .hf-x-homebar {
+    display: grid;
+    grid-template-columns: 38px 1fr 38px;
+    align-items: center;
+    height: 48px;
+    padding: 0 14px;
+    border-bottom: 1px solid #2f3336;
+    background: rgba(0,0,0,0.92);
+  }
+
+  .hf-x-mini-avatar {
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--post-color, #1d9bf0);
+  }
+
+  .hf-x-mini-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hf-x-logo {
+    justify-self: center;
+    color: #e7e9ea;
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .hf-x-gear {
+    justify-self: end;
+    color: #e7e9ea;
+    font-size: 21px;
   }
 
   .hf-x-tabs {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    background: rgba(7,10,15,0.92);
+    border-bottom: 1px solid #2f3336;
+    background: rgba(0,0,0,0.92);
   }
 
   .hf-x-tab {
     position: relative;
     display: grid;
     place-items: center;
-    height: 46px;
-    color: rgba(239,243,244,0.72);
+    height: 52px;
+    color: #71767b;
     font-size: 15px;
-    font-weight: 850;
+    font-weight: 700;
   }
 
   .hf-x-tab.is-active {
@@ -158,12 +201,12 @@
   }
 
   .hf-feed-scroll {
-    height: 648px;
+    height: 670px;
     overflow: hidden;
   }
 
   .hf-feed-scroll-inner {
-    padding: 12px 14px 70px;
+    padding: 0 0 80px;
     animation: hf-phone-scroll 9s cubic-bezier(0.45, 0, 0.2, 1) infinite;
   }
 
@@ -180,22 +223,25 @@
   }
 
   .hf-mobile-post {
-    padding: 16px 0 14px;
-    border-bottom: 1px solid rgba(47,51,54,0.95);
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    column-gap: 10px;
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid #2f3336;
   }
 
   .hf-mobile-author {
-    display: grid;
-    grid-template-columns: 46px 1fr auto;
-    gap: 11px;
+    display: flex;
+    gap: 4px;
     align-items: center;
+    min-width: 0;
   }
 
   .hf-mobile-avatar {
     display: grid;
     place-items: center;
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
     overflow: hidden;
     border-radius: 50%;
     background: var(--post-color, var(--hf-home));
@@ -210,47 +256,55 @@
   }
 
   .hf-mobile-name {
-    color: var(--hf-paper);
-    font-size: 16px;
-    font-weight: 950;
+    color: #e7e9ea;
+    font-size: 15px;
+    font-weight: 760;
+    white-space: nowrap;
+  }
+
+  .hf-mobile-name .hf-verified {
+    width: 17px;
+    height: 17px;
+    margin-left: 2px;
+    background: #1d9bf0;
+    font-size: 10px;
+    vertical-align: -2px;
   }
 
   .hf-mobile-handle {
-    margin-top: 2px;
-    color: rgba(255,243,208,0.52);
-    font-size: 13px;
-    font-weight: 750;
+    color: #71767b;
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
   }
 
-  .hf-follow-chip {
-    padding: 7px 11px;
-    border-radius: 999px;
-    background: var(--hf-paper);
-    color: var(--hf-ink);
-    font-size: 12px;
-    font-weight: 1000;
+  .hf-x-menu {
+    margin-left: auto;
+    color: #71767b;
+    font-size: 18px;
+    line-height: 1;
   }
 
   .hf-mobile-body {
-    margin-top: 14px;
+    margin-top: 3px;
     color: #eff3f4;
-    font-size: 20px;
-    font-weight: 850;
-    line-height: 1.24;
+    font-size: 15.5px;
+    font-weight: 520;
+    line-height: 1.32;
   }
 
   .hf-mobile-image {
-    margin-top: 14px;
+    margin-top: 10px;
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 20px;
-    background: linear-gradient(135deg, var(--post-color, var(--hf-home)), rgba(255,255,255,0.08));
+    border: 1px solid #2f3336;
+    border-radius: 16px;
+    background: #16181c;
   }
 
   .hf-mobile-image img {
     display: block;
     width: 100%;
-    height: 218px;
+    height: 214px;
     object-fit: cover;
   }
 
@@ -260,42 +314,56 @@
     margin-top: 12px;
     color: #71767b;
     font-size: 13px;
-    font-weight: 850;
+    font-weight: 520;
   }
 
   .hf-reply-thread {
-    margin-top: 10px;
-    padding-left: 56px;
+    margin-top: 0;
   }
 
   .hf-reply {
     position: relative;
-    padding: 12px 0;
-    border-top: 1px solid rgba(47,51,54,0.95);
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    column-gap: 10px;
+    padding: 10px 14px 12px;
+    border-bottom: 1px solid #2f3336;
   }
 
   .hf-reply::before {
     content: "";
     position: absolute;
-    top: -11px;
-    bottom: 18px;
-    left: -34px;
+    top: -18px;
+    bottom: calc(100% - 10px);
+    left: 35px;
     width: 2px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.22), transparent);
+    background: #2f3336;
+  }
+
+  .hf-reply-avatar {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--reply-color, #1d9bf0);
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
   }
 
   .hf-reply-name {
     color: #eff3f4;
-    font-size: 13px;
-    font-weight: 1000;
+    font-size: 14px;
+    font-weight: 720;
   }
 
   .hf-reply-body {
-    margin-top: 5px;
-    color: rgba(255,243,208,0.88);
-    font-size: 15px;
-    font-weight: 780;
-    line-height: 1.25;
+    margin-top: 3px;
+    color: #e7e9ea;
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.3;
   }
 
   .hf-reply-handle {
@@ -303,27 +371,20 @@
     font-weight: 760;
   }
 
-  .hf-scroll-hint {
+  .hf-x-bottom-nav {
     position: absolute;
     right: 20px;
-    bottom: 18px;
     left: 20px;
+    bottom: 0;
     z-index: 4;
-    display: flex;
-    justify-content: center;
-    pointer-events: none;
-  }
-
-  .hf-scroll-pill {
-    padding: 8px 12px;
-    border: 1px solid rgba(255,255,255,0.16);
-    border-radius: 999px;
-    background: rgba(0,0,0,0.64);
-    color: rgba(255,243,208,0.82);
-    font-size: 12px;
-    font-weight: 1000;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    height: 50px;
+    border-top: 1px solid #2f3336;
+    background: rgba(0,0,0,0.96);
+    color: #e7e9ea;
+    font-size: 19px;
+    place-items: center;
   }
 
   .hf-post-card {
@@ -631,14 +692,46 @@
     text-align: center;
   }
 
+  .hf-hupu-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 42px;
+    background: white;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .hf-hupu-tab {
+    position: relative;
+    display: grid;
+    place-items: center;
+    color: #777;
+    font-size: 14px;
+    font-weight: 850;
+  }
+
+  .hf-hupu-tab.is-active {
+    color: #ff6a00;
+  }
+
+  .hf-hupu-tab.is-active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 30px;
+    height: 3px;
+    border-radius: 999px;
+    background: #ff6a00;
+  }
+
   .hf-hupu-page {
-    height: 688px;
+    position: relative;
+    height: 646px;
     overflow: hidden;
     background: #f5f5f5;
   }
 
   .hf-hupu-scroll {
-    padding: 12px;
+    padding: 10px 10px 76px;
     animation: hf-hupu-scroll 10s cubic-bezier(0.45, 0, 0.2, 1) infinite;
   }
 
@@ -656,13 +749,13 @@
 
   .hf-hupu-card {
     overflow: hidden;
-    border-radius: 14px;
+    border-radius: 12px;
     background: white;
     box-shadow: 0 1px 0 rgba(0,0,0,0.06);
   }
 
   .hf-hupu-hero {
-    padding: 18px 16px 16px;
+    padding: 16px 14px 14px;
     background:
       linear-gradient(135deg, rgba(255,106,0,0.14), rgba(255,255,255,0)),
       white;
@@ -672,6 +765,22 @@
     color: #999;
     font-size: 13px;
     font-weight: 800;
+  }
+
+  .hf-hupu-topic-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .hf-hupu-pill {
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: #fff1e8;
+    color: #ff6a00;
+    font-size: 12px;
+    font-weight: 900;
   }
 
   .hf-hupu-subject {
@@ -721,6 +830,17 @@
     color: white;
     font-size: 16px;
     font-weight: 1000;
+  }
+
+  .hf-hupu-disclaimer {
+    margin-top: 10px;
+    padding: 8px 10px;
+    border-radius: 9px;
+    background: #f7f7f7;
+    color: #999;
+    font-size: 12px;
+    font-weight: 780;
+    line-height: 1.25;
   }
 
   .hf-hupu-bars {
@@ -825,6 +945,7 @@
     font-size: 12px;
   }
 
+
       body {
         margin: 0;
         min-height: 100vh;
@@ -858,52 +979,79 @@
       <div class="hf-phone-screen">
         <div class="hf-phone-topbar">
           <span>9:41</span>
-        <strong>𝕏</strong>
+          <span class="hf-ios-notch"></span>
           <span>5G 82%</span>
         </div>
+      <div class="hf-x-homebar">
+        <div class="hf-x-mini-avatar"><img src="../public/assets/players/maxey.png" alt="Tyrese Maxey" /></div>
+        <div class="hf-x-logo">𝕏</div>
+        <div class="hf-x-gear">⌕</div>
+      </div>
       <div class="hf-x-tabs"><div class="hf-x-tab is-active">For you</div><div class="hf-x-tab">Following</div></div>
       <div class="hf-feed-scroll">
         <div class="hf-feed-scroll-inner">
         <article class="hf-mobile-post">
-          <div class="hf-mobile-author">
-            <div class="hf-mobile-avatar"><img src="../public/assets/players/maxey.png" alt="Tyrese Maxey" /></div>
-            <div>
-              <div class="hf-mobile-name">Tyrese Maxey <span class="hf-verified">✓</span></div>
-              <div class="hf-mobile-handle">@TyreseMaxey · 12m</div>
+          <div class="hf-mobile-avatar"><img src="../public/assets/players/maxey.png" alt="Tyrese Maxey" /></div>
+          <div>
+            <div class="hf-mobile-author">
+              <span class="hf-mobile-name">Tyrese Maxey <span class="hf-verified">✓</span></span>
+              <span class="hf-mobile-handle">@TyreseMaxey · 12m</span>
+              <span class="hf-x-menu">···</span>
             </div>
-            <div class="hf-follow-chip">Follow</div>
+            <div class="hf-mobile-body">Game 1. Garden noise. First punch matters. We know what this one is.</div>
+            <div class="hf-mobile-image"><img src="../public/assets/players/maxey.png" alt="Tyrese Maxey post visual" /></div>
+            <div class="hf-mobile-actions"><span>💬 2.4K</span><span>↻ 6.9K</span><span>♡ 48K</span><span>↗</span></div>
           </div>
-          <div class="hf-mobile-body">Game 1. Garden noise. First punch matters. We know what this one is.</div>
-          <div class="hf-mobile-image"><img src="../public/assets/players/maxey.png" alt="Tyrese Maxey post visual" /></div>
-          <div class="hf-mobile-actions"><span>↩ 2.4K</span><span>↻ 6.9K</span><span>♥ 48K</span><span>↗ Share</span></div>
-          <span class="hf-source">X-style mock feed / synthetic content</span>
         </article>
         <div class="hf-reply-thread">
           
                 <article class="hf-reply" style="--reply-color: #006BB6">
-                  <div class="hf-reply-name">Paul George <span class="hf-reply-handle">@Yg_Trece · 9.8K likes</span></div>
-                  <div class="hf-reply-body">Set the tone early. Make the second side matter.</div>
+                  <div class="hf-reply-avatar">P</div>
+                  <div>
+                    <div class="hf-reply-name">Paul George <span class="hf-reply-handle">@Yg_Trece · 9.8K likes</span></div>
+                    <div class="hf-reply-body">Set the tone early. Make the second side matter.</div>
+                  </div>
                 </article>
               
                 <article class="hf-reply" style="--reply-color: #007A33">
-                  <div class="hf-reply-name">Celtics Watch <span class="hf-reply-handle">@celtics_stats · 3.1K likes</span></div>
-                  <div class="hf-reply-body">Boston will test that first action every possession.</div>
+                  <div class="hf-reply-avatar">C</div>
+                  <div>
+                    <div class="hf-reply-name">Celtics Watch <span class="hf-reply-handle">@celtics_stats · 3.1K likes</span></div>
+                    <div class="hf-reply-body">Boston will test that first action every possession.</div>
+                  </div>
                 </article>
               
                 <article class="hf-reply" style="--reply-color: #1d9bf0">
-                  <div class="hf-reply-name">film room <span class="hf-reply-handle">@half_court_lab · 1.7K likes</span></div>
-                  <div class="hf-reply-body">This is the clip before the clip: if the weak side tags early, Philly has to punish the closeout.</div>
+                  <div class="hf-reply-avatar">f</div>
+                  <div>
+                    <div class="hf-reply-name">film room <span class="hf-reply-handle">@half_court_lab · 1.7K likes</span></div>
+                    <div class="hf-reply-body">This is the clip before the clip: if the weak side tags early, Philly has to punish the closeout.</div>
+                  </div>
                 </article>
               
                 <article class="hf-reply" style="--reply-color: #007A33">
-                  <div class="hf-reply-name">Garden crowd <span class="hf-reply-handle">@parquet_noise · 822 likes</span></div>
-                  <div class="hf-reply-body">Post this again after the first timeout.</div>
+                  <div class="hf-reply-avatar">G</div>
+                  <div>
+                    <div class="hf-reply-name">Garden crowd <span class="hf-reply-handle">@parquet_noise · 822 likes</span></div>
+                    <div class="hf-reply-body">Post this again after the first timeout.</div>
+                  </div>
                 </article>
               
         </div>
+        <article class="hf-mobile-post">
+          <div class="hf-mobile-avatar" style="--post-color: #536471">F</div>
+          <div>
+            <div class="hf-mobile-author">
+              <span class="hf-mobile-name">Tyrese Maxey <span class="hf-verified">✓</span></span>
+              <span class="hf-mobile-handle">follow-up · now</span>
+              <span class="hf-x-menu">···</span>
+            </div>
+            <div class="hf-mobile-body">Second side has to be ready. One rotation late and Boston turns it into a run.</div>
+          </div>
+        </article>
         </div>
       </div>
-      <div class="hf-scroll-hint"><span class="hf-scroll-pill">scroll feed</span></div>
+      <div class="hf-x-bottom-nav"><span>⌂</span><span>⌕</span><span>✦</span><span>♡</span><span>✉</span></div>
     </div>
   </section>
 </div>
