@@ -28,6 +28,7 @@ Required properties:
 - **Motion-ready:** DOM structure should expose stable class names for GSAP.
 - **Broadcast credible:** use score bugs, chips, badges, panel chrome, and micro-labels.
 - **Social native:** support comments, posts, stickers, ratings, and fan sentiment.
+- **Premium phone staging:** phone-based templates should not sit flat in the center. Use perspective tilt, environmental light, reflections, and a deep floor shadow while keeping the in-phone UI faithful.
 
 ## Correction: Broadcast Social Is Not Mobile Social
 
@@ -153,6 +154,11 @@ Official comparison note:
 - For a player-post scene, use the `Post` detail layout with reply cells and `Replying to @handle` context.
 - Use Home timeline tabs only when the scene is literally "scrolling the feed"; otherwise the detail view is more faithful.
 
+Premium staging note:
+
+- Reference phone mockup tools use device rotation, environment lighting, reflective highlights, and cinematic background gradients to make the screen feel like a product shot.
+- This repo applies that only to the standalone phone showcase wrapper, not inside the X UI, so the platform interface stays recognizable.
+
 ### 3c. Hupu Official-Lite Rating
 
 Use for:
@@ -173,6 +179,7 @@ Design requirements:
 - immediate rating button
 - percentage bars without extra ranking rows
 - no hot comments unless the richer app-style template is selected
+- standalone preview should use 3D phone showcase lighting; the captured card inside the phone remains flat and official-lite.
 
 Implemented as:
 

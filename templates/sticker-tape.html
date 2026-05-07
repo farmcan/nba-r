@@ -1183,13 +1183,23 @@
   }
 
 
+      html {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #020505;
+      }
       body {
         margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
         min-height: 100vh;
         background:
-          radial-gradient(circle at 15% 12%, #007A3388, transparent 30%),
-          radial-gradient(circle at 85% 22%, #006BB688, transparent 30%),
-          linear-gradient(135deg, #030608, #07111a 58%, #050607);
+          radial-gradient(circle at 18% 12%, #007A33cc, transparent 25%),
+          radial-gradient(circle at 84% 18%, #006BB6aa, transparent 28%),
+          radial-gradient(circle at 54% 74%, rgba(255,225,153,0.18), transparent 26%),
+          linear-gradient(135deg, #020505, #07111a 58%, #050607);
       }
       .template-stage {
         
@@ -1199,19 +1209,100 @@
   --hf-paper: #fff3d0;
   --hf-ink: #06080b;
 
+        position: relative;
+        box-sizing: border-box;
         display: grid;
         place-items: center;
-        min-height: 100vh;
+        height: 100vh;
         padding: 56px;
+        overflow: hidden;
+        perspective: 1400px;
+      }
+      .template-stage::before,
+      .template-stage::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+      }
+      .template-stage::before {
+        width: 860px;
+        height: 860px;
+        border-radius: 50%;
+        background:
+          conic-gradient(from 210deg, transparent, rgba(255,255,255,0.14), transparent 28%, rgba(255,225,153,0.12), transparent 54%),
+          radial-gradient(circle, rgba(255,255,255,0.12), transparent 58%);
+        filter: blur(4px);
+        transform: translate3d(-210px, -70px, 0) rotate(-18deg);
+        opacity: 0.92;
+      }
+      .template-stage::after {
+        inset: auto 8% 8% 8%;
+        height: 190px;
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0.6), transparent 68%);
+        filter: blur(16px);
+        transform: rotateX(64deg);
       }
       .template-frame {
+        position: relative;
+        z-index: 1;
         width: 900px;
+      }
+      .template-frame.phone-showcase {
+        transform-style: preserve-3d;
+        transform: rotateX(8deg) rotateY(-16deg) rotateZ(1.5deg) translate3d(0, -10px, 0);
+        animation: hf-device-float 7.5s ease-in-out infinite;
+        filter: drop-shadow(58px 44px 48px rgba(0,0,0,0.42));
+      }
+      .template-frame.phone-showcase::before {
+        content: "";
+        position: absolute;
+        inset: 5% -8% 6% 76%;
+        z-index: -1;
+        border-radius: 34px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(0,0,0,0.42));
+        transform: translateZ(-42px) rotateY(72deg);
+        filter: blur(1px);
+        opacity: 0.66;
+      }
+      .template-frame.phone-showcase::after {
+        content: "";
+        position: absolute;
+        inset: -8% 5% 16% 8%;
+        z-index: 5;
+        pointer-events: none;
+        border-radius: 56px;
+        background:
+          linear-gradient(112deg, transparent 0 31%, rgba(255,255,255,0.24) 38%, rgba(255,255,255,0.06) 44%, transparent 54%),
+          radial-gradient(circle at 18% 10%, rgba(255,255,255,0.18), transparent 18%);
+        mix-blend-mode: screen;
+        opacity: 0.72;
+        transform: translateZ(70px);
+      }
+      .template-frame.phone-showcase .hf-mobile-feed::before,
+      .template-frame.phone-showcase .hf-hupu-phone::before,
+      .template-frame.phone-showcase .hf-hupu-lite-phone::before {
+        display: none;
+      }
+      .template-frame.phone-showcase .hf-mobile-feed,
+      .template-frame.phone-showcase .hf-hupu-phone,
+      .template-frame.phone-showcase .hf-hupu-lite-phone {
+        box-shadow:
+          0 26px 60px rgba(0,0,0,0.46),
+          inset 0 0 0 1px rgba(255,255,255,0.18);
+      }
+      @keyframes hf-device-float {
+        0%, 100% {
+          transform: rotateX(8deg) rotateY(-16deg) rotateZ(1.5deg) translate3d(0, -10px, 0);
+        }
+        50% {
+          transform: rotateX(9.5deg) rotateY(-12deg) rotateZ(0.2deg) translate3d(8px, -24px, 0);
+        }
       }
     </style>
   </head>
   <body>
     <main class="template-stage hf-template-shell">
-      <div class="template-frame">
+      <div class="template-frame ">
   <div class="hf-sticker-tape">
     <span class="hf-sticker" data-tone="warning" style="--tilt: -2.5deg">UPSET WATCH</span><span class="hf-sticker" data-tone="cold" style="--tilt: 2deg">FIRST ACTION</span><span class="hf-sticker" data-tone="neutral" style="--tilt: -2.5deg">BOSTON DEPTH</span><span class="hf-sticker" data-tone="hot" style="--tilt: 2deg">HOT TAKE</span><span class="hf-sticker" data-tone="warning" style="--tilt: -2.5deg">KEY 01</span>
   </div>
